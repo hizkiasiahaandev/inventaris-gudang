@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum Role {
+  ADMIN
+  STAFF
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(STAFF)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("Users")
+}
+
+model Supplier {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String?  @unique
+  phone       String?
+  address     String?
+  contactName String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  items       Item[]
+
+  @@map("Suppliers")
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  items       Item[]
+
+  @@map("categories")
+}
+
+model Item {
+  id             Int             @id @default(autoincrement())
+  sku            String          @unique
+  name           String
+  description    String?
+  stock          Int             @default(0)
+  minimumStock   Int             @default(0)
+  unit           String
+  purchasePrice  Decimal         @db.Decimal(15, 2)
+  isActive       Boolean         @default(true)
+  categoryId     Int
+  category       Category        @relation(fields: [categoryId], references: [id])
+  supplierId     Int
+  supplier       Supplier        @relation(fields: [supplierId], references: [id])
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  stockMovements StockMovement[]
+
+  @@map("items")
+}
+
+model CompanyProfile {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String?
+  phone       String?
+  address     String?
+  website     String?
+  description String?
+  logo        String? @db.LongText
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("company_profiles")
+}
+
+enum StockMovementType {
+  IN
+  OUT
+}
+
+enum StockMovementStatus {
+  COMPLETED
+  CANCELLED
+}
+
+model StockMovement {
+  id        Int                 @id @default(autoincrement())
+  itemId    Int
+  item      Item                @relation(fields: [itemId], references: [id])
+  type      StockMovementType
+  status    StockMovementStatus @default(COMPLETED)
+  quantity  Int
+  note      String?
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+
+  @@map("stock_movements")
+}
