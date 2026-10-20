@@ -137,7 +137,7 @@ export default function UserFormDialog({
                             })}
                         />
                         {errors.name && (
-                            <p role="alert" className="flex text-xs items-center gap-1 text-red-500">
+                            <p role="alert" className="flex text-xs items-center gap-1  text-destructive">
                                 <Info size={13} />
                                 {errors.name.message}
                             </p>
@@ -159,7 +159,7 @@ export default function UserFormDialog({
                             })}
                         />
                         {errors.email && (
-                            <p className="flex text-xs items-center gap-1 text-red-500">
+                            <p className="flex text-xs items-center gap-1  text-destructive">
                                 <Info size={13} />
                                 {errors.email.message}
                             </p>
@@ -183,7 +183,7 @@ export default function UserFormDialog({
 
                             />
                             {errors.password && (
-                                <p role="alert" className="flex text-xs items-center gap-1 text-red-500">
+                                <p role="alert" className="flex text-xs items-center gap-1  text-destructive">
                                     <Info size={13} />
                                     {errors.password.message}
                                 </p>

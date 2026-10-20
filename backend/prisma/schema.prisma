@@ -27,6 +27,10 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  createdItems          Item[]          @relation("ItemCreatedBy")
+  updatedItems          Item[]          @relation("ItemUpdatedBy")
+  createdStockMovements StockMovement[] @relation("StockMovementCreatedBy")
+
   @@map("Users")
 }
 
@@ -58,19 +62,27 @@ model Category {
 }
 
 model Item {
-  id             Int             @id @default(autoincrement())
-  sku            String          @unique
-  name           String
-  description    String?
-  stock          Int             @default(0)
-  minimumStock   Int             @default(0)
-  unit           String
-  purchasePrice  Decimal         @db.Decimal(15, 2)
-  isActive       Boolean         @default(true)
-  categoryId     Int
-  category       Category        @relation(fields: [categoryId], references: [id])
-  supplierId     Int
-  supplier       Supplier        @relation(fields: [supplierId], references: [id])
+  id            Int     @id @default(autoincrement())
+  sku           String  @unique
+  name          String
+  description   String?
+  stock         Int     @default(0)
+  minimumStock  Int     @default(0)
+  unit          String
+  purchasePrice Decimal @db.Decimal(15, 2)
+  isActive      Boolean @default(true)
+
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  supplierId Int
+  supplier   Supplier @relation(fields: [supplierId], references: [id])
+
+  createdById Int?
+  createdBy   User? @relation("ItemCreatedBy", fields: [createdById], references: [id])
+
+  updatedById    Int?
+  updatedBy      User?           @relation("ItemUpdatedBy", fields: [updatedById], references: [id])
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   stockMovements StockMovement[]
@@ -86,7 +98,7 @@ model CompanyProfile {
   address     String?
   website     String?
   description String?
-  logo        String? @db.LongText
+  logo        String?  @db.LongText
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -104,15 +116,19 @@ enum StockMovementStatus {
 }
 
 model StockMovement {
-  id        Int                 @id @default(autoincrement())
-  itemId    Int
-  item      Item                @relation(fields: [itemId], references: [id])
-  type      StockMovementType
-  status    StockMovementStatus @default(COMPLETED)
-  quantity  Int
-  note      String?
-  createdAt DateTime            @default(now())
-  updatedAt DateTime            @updatedAt
+  id       Int                 @id @default(autoincrement())
+  itemId   Int
+  item     Item                @relation(fields: [itemId], references: [id])
+  type     StockMovementType
+  status   StockMovementStatus @default(COMPLETED)
+  quantity Int
+  note     String?
+
+  createdById Int?
+  createdBy   User? @relation("StockMovementCreatedBy", fields: [createdById], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("stock_movements")
 }

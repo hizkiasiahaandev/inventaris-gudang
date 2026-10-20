@@ -70,7 +70,7 @@ export default function Header({
                 </div>
             </div>
 
-            {/* User Dropdown */}
+          
             <div className="flex items-center gap-4">
                 <DropdownMenu>
                     <DropdownMenuTrigger render={<button

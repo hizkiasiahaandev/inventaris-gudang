@@ -8,12 +8,12 @@ export const supplierService = {
     },
 
     async deactivateSupplier(id: number) {
-        const response = await api.get(`/supplier/${id}`);
+        const response = await api.patch(`/supplier/${id}/deactivate`);
         return response.data;
     },
 
     async activateSupplier(id: number) {
-        const response = await api.get(`/supplier/${id}`);
+        const response = await api.patch(`/supplier/${id}/activate`);
         return response.data;
     },
 
@@ -24,8 +24,8 @@ export const supplierService = {
         return response.data;
     },
 
-    async updateSupplier(data: updateSupplier) {
-        const response = await api.patch("/supplier", data);
+    async updateSupplier(data: updateSupplier, id: number) {
+        const response = await api.patch(`/supplier/${id}/`, data);
         return response.data;
     },
     

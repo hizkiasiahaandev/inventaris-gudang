@@ -35,7 +35,8 @@ export const supplierService = {
         });
     },
 
-    async deactivateSupplier(id: number) {
+  
+  async deactivateSupplier(id: number) {
         const supplier = await prisma.supplier.findUnique({
             where: {
                 id,
@@ -59,7 +60,6 @@ export const supplierService = {
             },
         });
     },
-
     async activateSupplier(id: number) {
         const supplier = await prisma.supplier.findUnique({
             where: {

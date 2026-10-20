@@ -123,7 +123,7 @@ export default function CategoriesFormDialog({
                     onSubmit={handleSubmit(onSubmit)}
                     className="space-y-4">
                     <div className="space-y-2">
-                        <Label htmlFor="name">Name <span className="text-red-500">*</span></Label>
+                        <Label htmlFor="name">Name <span className="text-destructive">*</span></Label>
                         <Input
                             id="name"
                             placeholder="Enter name"
@@ -135,7 +135,7 @@ export default function CategoriesFormDialog({
                             })}
                         />
                         {errors.name && (
-                            <p role="alert" className="flex items-center text-xs gap-1 text-red-500">
+                            <p role="alert" className="flex items-center text-xs gap-1 text-destructive">
                                 <Info size={13} />
                                 {errors.name.message}
                             </p>
@@ -150,7 +150,7 @@ export default function CategoriesFormDialog({
                             { ...register("description")}
                         />
                         {errors.description && (
-                            <p role="alert" className="flex items-center gap-1 text-red-500 text-xs">
+                            <p role="alert" className="flex items-center gap-1 text-destructive text-xs">
                                 <Info size={13} />
                             </p>
                         )}

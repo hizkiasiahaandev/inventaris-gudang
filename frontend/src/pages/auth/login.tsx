@@ -115,7 +115,7 @@ export default function LoginForm() {
 
                         </div>
                         {errors.email && (
-                            <p className="mt-1 flex gap-0.5 items-center text-xs text-red-600">
+                            <p className="mt-1 flex gap-0.5 items-center text-xs text-destructive">
                                 <Info size={12} className="shrink-0" />  {errors.email.message}
                             </p>
                         )}
@@ -149,7 +149,7 @@ export default function LoginForm() {
 
                         </div>
                         {errors.password && (
-                            <p className="mt-1 flex items-center gap-0.5 text-xs text-red-600">
+                            <p className="mt-1 flex items-center gap-0.5 text-xs text-destructive">
                                 <Info size={12} className="shrink-0" />  {errors.password.message}
                             </p>
                         )}

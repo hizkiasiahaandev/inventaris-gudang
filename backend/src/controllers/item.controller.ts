@@ -20,6 +20,8 @@ export const itemController = {
                 description,
             } = req.body;
 
+            const createdById= Number(req.user?.userId);
+
             const item = await itemService.createItem(
                 sku,
                 name,
@@ -29,6 +31,7 @@ export const itemController = {
                 purchasePrice,
                 categoryId,
                 supplierId,
+                createdById,
                 description,
             );
 
@@ -122,10 +125,78 @@ export const itemController = {
         } catch (error) {
             res.status(StatusCodes.BAD_REQUEST).json({
                 success: false,
-                message: error instanceof Error ? error.message: "Failed to retrieve item",
+                message: error instanceof Error ? error.message : "Failed to retrieve item",
             });
         };
-     },
-     
+    },
 
-}
+    async updateItem(
+        req: Request,
+        res: Response
+    ) {
+        try {
+
+            const id = Number(req.params.id);
+            const updatedById = Number(req.user?.userId);
+
+            const {
+                sku,
+                name,
+                stock,
+                minimumStock,
+                unit,
+                purchasePrice,
+                categoryId,
+                supplierId,
+                description,
+            } = req.body;
+
+            const item = await itemService.updateItem(
+                id,
+                sku,
+                name,
+                stock,
+                minimumStock,
+                unit,
+                purchasePrice,
+                categoryId,
+                supplierId,
+                updatedById,
+                description,
+            );
+
+            res.status(StatusCodes.OK).json({
+                success: true,
+                message: "Item successfully updated.",
+                data: item
+            });
+        } catch (error) {
+            res.status(StatusCodes.BAD_REQUEST).json({
+                success: false,
+                message: error instanceof Error ? error.message : "Failed to updated.",
+            });
+        };
+    },
+
+    async getItemById(
+        req: Request,
+        res: Response
+    ) {
+        try {
+            const id = Number(req.params.id);
+
+            const item = await itemService.getItemById(id);
+
+            res.status(StatusCodes.OK).json({
+                success: true,
+                message: "Item successfully retrieved.",
+                data: item,
+            });
+        } catch (error) {
+            res.status(StatusCodes.BAD_REQUEST).json({
+                success: false,
+                message: error instanceof Error ? error.message : "Failed to get item."
+            });
+        };
+    },
+};

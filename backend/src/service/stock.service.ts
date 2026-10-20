@@ -7,61 +7,102 @@ export const stockService = {
         itemId: number,
         type: StockMovementType,
         quantity: number,
+        createdById: number,
         note?: string,
     ) {
-        if (quantity <= 0 || !Number.isInteger(quantity)) {
+        if (!Number.isInteger(itemId) || itemId <= 0) {
+            throw new Error("Invalid item ID");
+        }
+
+        if (!Number.isInteger(createdById) || createdById <= 0) {
+            throw new Error("Invalid creator ID");
+        }
+
+        if (!Number.isInteger(quantity) || quantity <= 0) {
             throw new Error("Quantity must be a positive integer");
         }
 
-
-        const item = await prisma.item.findUnique({
-            where: {
-                id: itemId,
-            },
-        });
-
-        if (!item) {
-            throw new Error("Item not found");
-        }
-
-        let newStock = item.stock;
-
-        if (type === StockMovementType.IN) {
-            newStock = item.stock + quantity;
-        }
-
-        if (type === StockMovementType.OUT) {
-            newStock = item.stock - quantity;
-
-            if (newStock < item.minimumStock) {
-                throw new Error("Stock cannot be lower than minimum stock");
-            }
+        if (
+            type !== StockMovementType.IN &&
+            type !== StockMovementType.OUT
+        ) {
+            throw new Error("Invalid stock movement type");
         }
 
         return prisma.$transaction(async (tx) => {
+            const item = await tx.item.findUnique({
+                where: { id: itemId },
+            });
+
+            if (!item) {
+                throw new Error("Item not found");
+            }
+
+            const creator = await tx.user.findUnique({
+                where: { id: createdById },
+                select: { id: true },
+            });
+
+            if (!creator) {
+                throw new Error("Creator not found");
+            }
+
+            let newStock = item.stock;
+
+            if (type === StockMovementType.IN) {
+                newStock += quantity;
+            } else {
+                newStock -= quantity;
+
+                if (newStock < item.minimumStock) {
+                    throw new Error(
+                        "Stock cannot be lower than minimum stock"
+                    );
+                }
+            }
+
             const movement = await tx.stockMovement.create({
                 data: {
-                    itemId,
+                    item: {
+                        connect: { id: itemId },
+                    },
                     type,
                     status: StockMovementStatus.COMPLETED,
                     quantity,
                     ...(note !== undefined && { note }),
+                    createdBy: {
+                        connect: { id: createdById },
+                    },
+                },
+                include: {
+                    item: {
+                        select: {
+                            id: true,
+                            sku: true,
+                            name: true,
+                        },
+                    },
+                    createdBy: {
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
                 },
             });
 
-            const item = await tx.item.update({
+            const updatedItem = await tx.item.update({
                 where: { id: itemId },
-                data: {
-                    stock: newStock,
-                },
+                data: { stock: newStock },
             });
 
             return {
                 movement,
-                item,
+                item: updatedItem,
             };
         });
     },
+
 
     async getStockMovemnts(
         page: number,
@@ -107,6 +148,12 @@ export const stockService = {
                             name: true,
                         },
                     },
+                    createdBy: {
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
                 },
                 orderBy: {
                     createdAt: "desc",
@@ -136,7 +183,7 @@ export const stockService = {
             throw new Error("Invalid stock ID");
         }
 
-        return prisma.stockMovement.findUnique({
+        const movement = await prisma.stockMovement.findUnique({
             where: {
                 id
             },
@@ -148,8 +195,20 @@ export const stockService = {
                         name: true,
                     },
                 },
+                createdBy: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
             },
         });
+
+        if (!movement) {
+             throw new Error("Stock movement not found");
+        }
+
+        return movement;
     },
 
     async cancelStockMovement(id: number) {
@@ -185,7 +244,7 @@ export const stockService = {
         }
 
         return prisma.$transaction(async (tx) => {
-            const updatedMovement = await prisma.stockMovement.update({
+            const updatedMovement = await tx.stockMovement.update({
                 where: {
                     id,
                 },

@@ -13,7 +13,6 @@ export default function MainDashboard() {
     const [summary, setSummary] = useState<DashboardSummary | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
-
     const data = statsData({
         totalItems: summary?.totalItems ?? 0,
         totalStock: summary?.totalStock ?? 0,
@@ -27,18 +26,36 @@ export default function MainDashboard() {
                 const response = await dashboardSummaryService.getSummary();
                 setSummary(response.data);
             } catch (error) {
-                if (axios.isAxiosError<ErrorResponse>(error)) {
-                    error.response?.data.message || "Failed to get DashboardSummary";
-                }
+                window.alert(
+                    axios.isAxiosError<ErrorResponse>(error)
+                        ? error.response?.data.message ||
+                        "Failed to get dashboad summary"
+                        : "An unexpected error occured"
+                )
             } finally {
                 setTimeout(() => {
                     setIsLoading(false);
-                }, 1500);
+                }, 300);
             };
         };
 
         getSummary();
     }, []);
+
+    const dashboadLowStock = [
+        "SKU",
+        "Name",
+        "Stock",
+        "Minimum Stock",
+        "Unit"
+    ];
+
+    const dashboadRecentStock = [
+        "Item",
+        "Type",
+        "Qty",
+        "Date"
+    ];
 
     return (
         <div className="space-y-6">
@@ -82,7 +99,7 @@ export default function MainDashboard() {
             </div>
 
             <div className="w-full">
-                <div className="flex w-full flex-col gap-3 rounded-xl border border-slate-200/80 bg-white p-5 shadow-xs transition-all hover:border-slate-300 hover:shadow-sm"> 
+                <div className="flex w-full flex-col gap-3 rounded-xl border border-slate-200/80 bg-white p-5 shadow-xs transition-all hover:border-slate-300 hover:shadow-sm">
                     <div>
                         <h2 className="text-sm  text-slate-800">
                             Stock Movements
@@ -105,7 +122,6 @@ export default function MainDashboard() {
                 </div>
             </div>
 
-            {/* ==================== Low Stock Items ==================== */}
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
 
                 <div className="flex flex-col gap-3 rounded-xl border border-slate-200/80 bg-white p-5 shadow-xs transition-all hover:border-slate-300 hover:shadow-sm">
@@ -121,11 +137,16 @@ export default function MainDashboard() {
                         <table className="w-full  text-left text-xs">
                             <thead className="text-white font-semibold">
                                 <tr className="bg-slate-800">
-                                    <th className="whitespace-nowrap px-3 py-2.5">SKU</th>
-                                    <th className="whitespace-nowrap px-3 py-2.5">Name</th>
-                                    <th className="whitespace-nowrap px-3 py-2.5">Stock</th>
-                                    <th className="whitespace-nowrap px-3 py-2.5">Min</th>
-                                    <th className="whitespace-nowrap px-3 py-2.5 text-right">Unit</th>
+                                    {dashboadLowStock.map((col) => (
+                                        <th key={col}
+                                        className={`whitespace-nowrap px-3 py-2.5 ${col === "Unit"
+                                            ? "text-right"
+                                            : ""
+                                        }`}
+                                        >
+                                            {col}
+                                        </th>
+                                    ))}
                                 </tr>
                             </thead>
                             <tbody>
@@ -139,13 +160,13 @@ export default function MainDashboard() {
                                     summary.lowStockItems.map((item) => (
                                         <tr
                                             key={item.id}
-                                            className="border-b border-slate-100 last:border-0 hover:bg-gray-50 [&>td]:px-3 [&>td]:py-2"
+                                            className="border-b border-slate-100 transition-colors hover:bg-slate-50"
                                         >
-                                            <td className="whitespace-nowrap font-mono text-[11px] text-slate-500">{item.sku}</td>
-                                            <td className="whitespace-nowrap font-semibold  text-slate-800">{item.name}</td>
-                                            <td className="whitespace-nowrap text-right font-semibold text-red-600">{item.stock}</td>
-                                            <td className="whitespace-nowrap text-right text-slate-500">{item.minimumStock}</td>
-                                            <td className="whitespace-nowrap text-slate-500">{item.unit}</td>
+                                            <td className="whitespace-nowrap px-3 py-2.5 font-mono text-[12px] text-slate-500">{item.sku}</td>
+                                            <td className="whitespace-nowrap px-3 py-2.5 text-slate-800 font-semibold">{item.name}</td>
+                                            <td className="whitespace-nowrap px-3 py-2.5 font-semibold text-destructive">{item.stock}</td>
+                                            <td className="whitespace-nowrap px-3 py-2.5 text-slate-500">{item.minimumStock}</td>
+                                            <td className="whitespace-nowrap px-3 py-2.5 text-slate-500 text-right">{item.unit}</td>
                                         </tr>
                                     ))
                                 ) : (
@@ -161,7 +182,6 @@ export default function MainDashboard() {
                     </div>
                 </div>
 
-                {/* ==================== Recent Stock Movements ==================== */}
                 <div className="flex flex-col gap-3 rounded-xl border border-slate-200/80 bg-white p-5 shadow-xs transition-all hover:border-slate-300 hover:shadow-sm">
                     <div>
                         <h2 className="text-sm font-semibold  text-slate-800">
@@ -176,10 +196,14 @@ export default function MainDashboard() {
                         <table className="w-full text-left text-xs">
                             <thead className="text-white font-semibold">
                                 <tr className="bg-slate-800">
-                                   <th className="wrap-normal px-3 py-2.5">Item</th>
-                                   <th className="wrap-normal px-3 py-2.5">Type</th>
-                                   <th className="wrap-normal px-3 py-2.5">Qty</th>
-                                   <th className="wrap-normal px-3 py-2.5 text-right">Date</th>
+                                    {dashboadRecentStock.map((col) => (
+                                        <th key={col} className={`whitespace-nowrap px-3 py-2.5 ${col === "Date"
+                                            ? "text-right"
+                                            : ""
+                                        }`}>
+                                            {col}
+                                        </th>
+                                    ))}
                                 </tr>
                             </thead>
                             <tbody>
@@ -195,15 +219,15 @@ export default function MainDashboard() {
                                             key={mv.id}
                                             className="border-b border-slate-100 last:border-0 hover:bg-gray-50 [&>td]:px-3 [&>td]:py-2"
                                         >
-                                            <td className="whitespace-nowrap">
+                                            <td className="whitespace-nowrap px-3 py-2.5">
                                                 <div className="font-medium  text-slate-800">
                                                     {mv.item.name}
                                                 </div>
-                                                <div className="font-mono text-[11px] text-slate-500">
+                                                <div className="font-mono text-[12px] text-slate-500">
                                                     {mv.item.sku}
                                                 </div>
                                             </td>
-                                            <td className="whitespace-nowrap">
+                                            <td className="whitespace-nowrap px-3 py-2.5">
                                                 <span className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-semibold">
                                                     {mv.type === "IN" ? (
                                                         <PackagePlus className="size-3" />
@@ -213,10 +237,10 @@ export default function MainDashboard() {
                                                     {mv.type}
                                                 </span>
                                             </td>
-                                            <td className="whitespace-nowrap text-right font-semibold  text-slate-800">
+                                            <td className="whitespace-nowrap px-3 py-2.5  font-semibold  text-slate-800">
                                                 {mv.quantity}
                                             </td>
-                                            <td className="whitespace-nowrap text-right text-slate-500">
+                                            <td className="whitespace-nowrap px-3 py-2.5 text-slate-500 text-right">
                                                 {date(mv.createdAt)}
                                             </td>
                                         </tr>
@@ -236,4 +260,4 @@ export default function MainDashboard() {
 
         </div>
     );
-}
+};

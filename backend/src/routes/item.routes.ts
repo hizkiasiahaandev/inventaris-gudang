@@ -12,6 +12,20 @@ router.post(
     itemController.createItem
 );
 
+router.get(
+    "/:id",
+    authMiddleware,
+    roleMiddleware("ADMIN", "STAFF"),
+    itemController.getItemById,
+);
+
+router.put(
+    "/:id",
+    authMiddleware,
+    roleMiddleware("ADMIN", "STAFF"),
+    itemController.updateItem,
+);
+
 router.patch(
     "/:id/deactivate",
     authMiddleware,

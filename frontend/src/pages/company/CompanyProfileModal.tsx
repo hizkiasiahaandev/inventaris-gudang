@@ -29,7 +29,7 @@ import type { Mode } from "@/types/mode.type";
 type CompanyProfileModalProps = {
     mode: Mode;
     isOpen: boolean;
-    initialData?: CompanyProfileService | null;
+    company?: CompanyProfileService | null;
     onClose: () => void;
     onSuccess: () => void;
 };
@@ -47,14 +47,14 @@ const emptyForm: CompanyProfileFormData = {
 export default function CompanyProfileModal({
     mode,
     isOpen,
-    initialData,
+    company,
     onClose,
     onSuccess,
 }: CompanyProfileModalProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    const [logoPreview, setLogoPreview] = useState<string | null>(initialData?.logo || null);
+    const [logoPreview, setLogoPreview] = useState<string | null>(company?.logo || null);
 
     const handleLogoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -88,16 +88,16 @@ export default function CompanyProfileModal({
     useEffect(() => {
         if (!isOpen) return;
 
-        if (mode === "edit" && initialData) {
-            const existingLogo = initialData.logo ?? "";
+        if (mode === "edit" && company) {
+            const existingLogo = company.logo ?? "";
             reset({
-                name: initialData.name ?? "",
-                email: initialData.email ?? "",
-                phone: initialData.phone ?? "",
-                address: initialData.address ?? "",
-                website: initialData.website ?? "",
-                description: initialData.description ?? "",
-                logo: initialData.logo ?? "",
+                name: company.name ?? "",
+                email: company.email ?? "",
+                phone: company.phone ?? "",
+                address: company.address ?? "",
+                website: company.website ?? "",
+                description: company.description ?? "",
+                logo: company.logo ?? "",
             });
             setLogoPreview(existingLogo || null);
         } else {
@@ -105,7 +105,7 @@ export default function CompanyProfileModal({
         }
 
         setError("");
-    }, [isOpen, mode, initialData, reset]);
+    }, [isOpen, mode, company, reset]);
 
     const onSubmit = async (form: CompanyProfileFormData) => {
         setLoading(true);
@@ -153,7 +153,7 @@ export default function CompanyProfileModal({
             onSuccess();
         } catch (err) {
             console.error(err);
-            setError("Gagal menyimpan profil perusahaan.");
+            setError("Failed to save company profile.");
         } finally {
             setLoading(false);
         }
@@ -232,23 +232,25 @@ export default function CompanyProfileModal({
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="name">Nama Perusahaan *</Label>
+                                <Label htmlFor="name">
+                                    Company Name <span className="text-destructive">*</span>
+                                </Label>
 
                                 <Input
                                     id="name"
-                                    placeholder="Masukkan nama perusahaan"
+                                    placeholder="Enter company name"
                                     disabled={loading}
                                     {...register("name", {
-                                        required: "Nama perusahaan wajib diisi.",
+                                        required: "Company name is required.",
                                         validate: (value) =>
                                             value.trim().length > 0 ||
-                                            "Nama perusahaan tidak boleh kosong.",
+                                            "Company name cannot be empty.",
                                     })}
                                 />
 
                                 {errors.name && (
-                                    <p className="flex items-center gap-1 text-sm text-destructive">
-                                        <Info size={14} />
+                                    <p className="flex items-center gap-1 text-xs text-destructive">
+                                        <Info size={13} />
                                         {errors.name.message}
                                     </p>
                                 )}
@@ -256,10 +258,9 @@ export default function CompanyProfileModal({
                         </div>
                     </div>
 
-                    
+
                     <div className="space-y-2">
                         <Label htmlFor="email">Email</Label>
-
                         <Input
                             id="email"
                             type="email"
@@ -268,37 +269,38 @@ export default function CompanyProfileModal({
                             {...register("email", {
                                 pattern: {
                                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                    message: "Format email tidak valid.",
+                                    message: "Invalid email format.",
                                 },
                             })}
                         />
 
                         {errors.email && (
-                            <p className="text-sm flex items-center gap-1 text-destructive">
-                              <Info size={14} />  {errors.email.message}
+                            <p className="text-xs flex items-center gap-1 text-destructive">
+                                <Info size={13} />
+                                {errors.email.message}
                             </p>
                         )}
                     </div>
 
-                  
+
                     <div className="space-y-2">
-                        <Label htmlFor="phone">Nomor Telepon</Label>
+                        <Label htmlFor="phone">Phone Number</Label>
 
                         <Input
                             id="phone"
-                            placeholder="Masukkan nomor telepon"
+                            placeholder="Enter phone number"
                             disabled={loading}
                             {...register("phone")}
                         />
                     </div>
 
-               
+
                     <div className="space-y-2">
-                        <Label htmlFor="address">Alamat</Label>
+                        <Label htmlFor="address">Address</Label>
 
                         <Input
                             id="address"
-                            placeholder="Masukkan alamat perusahaan"
+                            placeholder="Enter company address"
                             disabled={loading}
                             {...register("address")}
                         />
@@ -317,21 +319,21 @@ export default function CompanyProfileModal({
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="description">Deskripsi</Label>
+                        <Label htmlFor="description">Description</Label>
 
                         <Textarea
                             id="description"
-                            placeholder="Deskripsi perusahaan..."
+                            placeholder="Company description..."
                             rows={3}
                             disabled={loading}
                             {...register("description")}
                         />
                     </div>
 
-                   
+
                     {error && (
-                        <p role="alert" className="text-sm flex items-center gap-1 text-destructive">
-                            <Info size={14} />  {error}
+                        <p role="alert" className="text-xs flex items-center gap-1 text-destructive">
+                            <Info size={13} />  {error}
                         </p>
                     )}
 
@@ -368,4 +370,4 @@ export default function CompanyProfileModal({
             </DialogContent>
         </Dialog>
     );
-}
+};

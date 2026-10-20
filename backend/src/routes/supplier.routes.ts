@@ -41,7 +41,7 @@ router.get(
     supplierController.getSuppliers
 );
 
-router.put(
+router.patch(
     "/:id",
     authMiddleware,
     roleMiddleware("ADMIN"),

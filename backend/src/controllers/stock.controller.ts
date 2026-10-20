@@ -10,11 +10,13 @@ export const stockController = {
     ) {
         try {
             const { itemId, type, quantity, note } = req.body;
+            const createdById = Number(req.user?.userId);
 
             const stock = await stockService.createStockMovement(
-                itemId,
+                Number(itemId),
                 type,
-                quantity,
+                Number(quantity),
+                createdById,
                 note
             );
 

@@ -3,7 +3,11 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Search } from "lucide-react";
 
+
 export default function ManageItems() {
+   
+
+   
 
     const items = [
         { label: "All", value: "all" },
@@ -90,6 +94,8 @@ export default function ManageItems() {
                     </table>
                 </div>
             </div>
+
+        
         </div>
     );
 }

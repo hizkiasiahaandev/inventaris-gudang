@@ -77,7 +77,7 @@ export default function CategoryDetailsDialog({
                 ) : error ? (
                     <p
                         role="alert"
-                        className="py-6 text-center text-sm text-red-500"
+                        className="py-6 text-center text-sm text-destructive"
                     >
                         {error}
                     </p>

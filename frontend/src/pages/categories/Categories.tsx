@@ -33,7 +33,7 @@ export default function ManageCategories() {
 
     const [totalCategories, setTotalCategories] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
-
+ 
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
@@ -278,7 +278,7 @@ export default function ManageCategories() {
                                 <tr>
                                     <td
                                         colSpan={categoryColumns.length}
-                                        className="px-3 py-8 text-sm text-red-500"
+                                        className="px-3 py-8 text-sm text-destructive"
                                     >
                                         <div className="flex text-xs items-center gap-1 justify-center">
                                             <Info size={13} /> {error}
@@ -299,7 +299,7 @@ export default function ManageCategories() {
                                         colSpan={categoryColumns.length}
                                         className="px-3 py-8"
                                     >
-                                        <div className="flex items-center gap-1 text-red-500 justify-center text-xs">
+                                        <div className="flex items-center gap-1 text-destructive justify-center text-xs">
                                             <Info size={13} />
                                             <span>No categorirs found.</span>
                                         </div>

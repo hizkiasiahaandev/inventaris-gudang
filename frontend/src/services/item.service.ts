@@ -21,7 +21,6 @@ export const itemService = {
         const response = await api.get("/item", {
             params,
         });
-
         return response.data;
     },
 };

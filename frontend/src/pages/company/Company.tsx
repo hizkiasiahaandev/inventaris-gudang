@@ -35,7 +35,7 @@ export default function CompanyProfile() {
         } finally {
             setTimeout(() => {
                 setIsLoading(false);
-            }, 1500);
+            },  300);
         }
     };
 
@@ -52,7 +52,6 @@ export default function CompanyProfile() {
         setMode("edit");
         setIsModalOpen(true);
     }
-
 
 
     return (
@@ -77,7 +76,7 @@ export default function CompanyProfile() {
                     <Spinner text="Loading company profile" size={66} />
                 </div>
             ) : company ? (
-                <div className="bg-white border shadow-xs hover:border-slate-300 transition-all hover:shadow-sm p-6 rounded-xl border-gray-200/15">
+                <div className="bg-white border shadow-sm border-slate-200 transition-all hover:shadow-sm p-6 rounded-xl">
                     <div className="flex items-start gap-5 pb-6 border-b border-gray-200">
                         <div className="flex size-16 items-center justify-center overflow-hidden rounded-lg bg-slate-800 text-white shadow-sm">
                             {company?.logo ? (
@@ -183,7 +182,7 @@ export default function CompanyProfile() {
             <CompanyProfileModal
                 mode={mode}
                 isOpen={isModalOpen}
-                initialData={company}
+                company={company}
                 onClose={() => setIsModalOpen(false)}
                 onSuccess={() => {
                     void getCompanyProfile();

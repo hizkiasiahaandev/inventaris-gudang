@@ -14,10 +14,29 @@ export interface getSuppliers {
 }
 
 export interface updateSupplier {
-    id: number,
     name?: string,
     email?: string,
     phone?: string,
     address?: string,
     contactName?: string
+}
+
+export interface SupplierFormValues {
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+    contactName: string;
+}
+
+export interface SupplierData {
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+    contactName: string;
+    isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
 }

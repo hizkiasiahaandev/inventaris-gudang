@@ -285,7 +285,7 @@ export default function ManageUser() {
                                 <tr>
                                     <td
                                         colSpan={columns.length}
-                                        className="px-3 py-8 text-sm  text-red-500"
+                                        className="px-3 py-8 text-sm  text-destructive"
                                     >
                                         <div className="flex items-center gap-1 justify-center">
                                             <Info size={14} />  {error}

@@ -26,7 +26,7 @@ export default function Sidebar({
             try {
                 const response = await userService.getMe();
                 const role = response.data.role;
-
+                
                 if (role === "ADMIN" || role === "STAFF") {
                     setUserRole(role);
                 }
