@@ -1,10 +1,13 @@
 
 import Spinner from "@/components/common/Spinner";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogDescription,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
@@ -141,7 +144,7 @@ export default function CategoryDetailsDialog({
                         <Separator />
 
 
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <p className="text-sm text-slate-500">
                                     Created At
@@ -162,6 +165,18 @@ export default function CategoryDetailsDialog({
                         </div>
                     </div>
                 ) : null}
+                <DialogFooter>
+                    <DialogClose
+                        render={
+                            <Button
+                                type="button"
+                                variant="outline"
+                            >
+                                Cancel
+                            </Button>
+                        }
+                    />
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

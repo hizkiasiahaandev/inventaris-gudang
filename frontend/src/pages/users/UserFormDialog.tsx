@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { userService } from "@/services/user.service";
 import type { ErrorResponse } from "@/types/api";
 import type { Mode } from "@/types/mode.type";
 import type { UserFormValues, registerData, updateUser, UserData } from "@/types/user.types";
+import { ErrorMessage } from "@/utils/error";
 import axios from "axios";
-import { Info, Loader, Plus, Save } from "lucide-react";
+import { Loader, Plus, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -87,16 +88,16 @@ export default function UserFormDialog({
         } catch (error) {
             console.error("Failed to save user", error);
             if (axios.isAxiosError<ErrorResponse>(error)) {
-               window.alert(
-                error.response?.data.message ?? error.message
-               );
-            } else  if (error instanceof Error) {
+                window.alert(
+                    error.response?.data.message ?? error.message
+                );
+            } else if (error instanceof Error) {
                 window.alert(error.message);
             } else {
                 window.alert(
                     mode === "create"
-                    ? "Failed to create user."
-                    : "Failed to update user."
+                        ? "Failed to create user."
+                        : "Failed to update user."
                 );
             };
         } finally {
@@ -137,10 +138,7 @@ export default function UserFormDialog({
                             })}
                         />
                         {errors.name && (
-                            <p role="alert" className="flex text-xs items-center gap-1  text-destructive">
-                                <Info size={13} />
-                                {errors.name.message}
-                            </p>
+                            <ErrorMessage message={errors.name.message} />
                         )}
                     </div>
 
@@ -159,10 +157,7 @@ export default function UserFormDialog({
                             })}
                         />
                         {errors.email && (
-                            <p className="flex text-xs items-center gap-1  text-destructive">
-                                <Info size={13} />
-                                {errors.email.message}
-                            </p>
+                            <ErrorMessage message={errors.email.message} />
                         )}
                     </div>
 
@@ -183,24 +178,23 @@ export default function UserFormDialog({
 
                             />
                             {errors.password && (
-                                <p role="alert" className="flex text-xs items-center gap-1  text-destructive">
-                                    <Info size={13} />
-                                    {errors.password.message}
-                                </p>
+                                <ErrorMessage message={errors.password.message} />
                             )}
                         </div>
                     )}
 
-                   <DialogFooter>
-                      <Button
+                    <DialogFooter>
+                        <DialogClose
+                        render={
+                            <Button
                             type="button"
                             variant="outline"
                             disabled={isSubmitting}
-                            onClick={() => onOpenChange(false)}
-                        >
-                            Cancel
-                        </Button>
-
+                            >
+                                Cancel
+                            </Button>
+                        }
+                        />
                         <Button
                             type="submit"
                             className="bg-slate-800 hover:bg-slate-900 transition-colors duration-300  focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 border border-slate-300/80"
@@ -223,7 +217,7 @@ export default function UserFormDialog({
                                 </>
                             )}
                         </Button>
-                   </DialogFooter>
+                    </DialogFooter>
                 </form>
             </DialogContent>
         </Dialog>

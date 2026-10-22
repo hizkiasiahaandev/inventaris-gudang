@@ -47,6 +47,10 @@ export interface UserFormValues {
 export interface UserData {
     id: number;
     name: string;
-    email: string
-}
+    email: string;
+    role: Role;
+    isActive:boolean;
+    createdAt: string;
+    updatedAt: string;
+};
 

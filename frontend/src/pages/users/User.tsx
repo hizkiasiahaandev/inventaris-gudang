@@ -11,7 +11,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import type { User } from "@/types/user.types";
-import { CheckCircle,  Edit, Ellipsis, Info, Plus, Search, UserCheck, UserX, XCircle } from "lucide-react";
+import { CheckCircle, Edit, Ellipsis, Eye, Info, Plus, Search, UserCheck, UserX, XCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import UserFormDialog from "./UserFormDialog";
 import { userService } from "@/services/user.service";
@@ -23,6 +23,8 @@ import axios from "axios";
 import type { ErrorResponse } from "@/types/api";
 import { Badge } from "@/components/ui/badge";
 import type { Mode } from "@/types/mode.type";
+import UserDetailsDialog from "./UserDetailsDialog";
+import CustomTooltip from "@/components/common/CustomTooltip";
 
 export default function ManageUser() {
     const [users, setUsers] = useState<User[]>([]);
@@ -42,6 +44,9 @@ export default function ManageUser() {
 
     const [totalUsers, setTotalUsers] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+
+    const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+    const [selectedUserById, setSelectedUserById] = useState<number | null>(null);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -108,6 +113,12 @@ export default function ManageUser() {
         setMode("edit");
         setIsDialogOpen(true);
     };
+
+    const handleViewDetails = (user: User) => {
+        setSelectedUserById(user.id);
+        setIsDetailsOpen(true);
+    };
+
 
     const handleActivate = async (id: number) => {
         try {
@@ -191,18 +202,19 @@ export default function ManageUser() {
                     </p>
                 </div>
 
-                <button
-                    type="button"
-                    onClick={handleCreate}
-                    className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-slate-300/50 bg-slate-800 px-4 py-2 text-sm font-medium text-white shadow-sm transition-all hover:shadow-xl focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
-                >
-                    <Plus size={14} />
-                    Add User
-                </button>
+                <CustomTooltip content="Add User">
+                    <button
+                        type="button"
+                        onClick={handleCreate}
+                        className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-slate-300/50 bg-slate-800 px-4 py-2 text-sm font-medium text-white shadow-sm transition-all hover:shadow-xl focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
+                    >
+                        <Plus size={14} />
+                        Add User
+                    </button>
+                </CustomTooltip>
             </div>
 
             <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-                {/* Search and filter */}
                 <div className="flex flex-col gap-4 border-b border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="relative w-full sm:w-72">
                         <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
@@ -249,7 +261,6 @@ export default function ManageUser() {
                     </div>
                 </div>
 
-                {/* Table */}
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
                         <thead className="font-semibold text-white">
@@ -351,21 +362,21 @@ export default function ManageUser() {
                                         <td
                                             className="px-3 py-3 ">
                                             <Badge
-                                            variant="outline"
-                                            className={user.isActive
-                                                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                                                : "border-red-200 bg-red-50 text-red-700"
-                                            }
+                                                variant="outline"
+                                                className={user.isActive
+                                                    ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                                                    : "border-red-200 bg-red-50 text-red-700"
+                                                }
                                             >
                                                 {user.isActive ? (
                                                     <>
-                                                    <CheckCircle />
-                                                    Active
+                                                        <CheckCircle />
+                                                        Active
                                                     </>
-                                                ): (
+                                                ) : (
                                                     <>
-                                                    <XCircle />
-                                                    Inactive
+                                                        <XCircle />
+                                                        Inactive
                                                     </>
                                                 )}
                                             </Badge>
@@ -384,16 +395,29 @@ export default function ManageUser() {
 
                                         <td className="whitespace-nowrap px-3 py-3 text-right">
                                             <div className="flex items-center justify-end gap-2">
-                                                <button
+                                                <CustomTooltip content="See User details">
+                                                    <button
+                                                        type="button"
+                                                        className="rounded-md p-2 text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-900"
+                                                        aria-label="See User details"
+                                                        onClick={() => handleViewDetails(user)}
+                                                    >
+                                                        <Eye className="size-4" />
+                                                    </button>
+
+                                                </CustomTooltip>
+                                              
+                                              <CustomTooltip content="Edit user">
+                                                  <button
                                                     type="button"
                                                     onClick={() => handleEdit(user)}
                                                     className="rounded-md p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
-                                                    title="Edit user"
                                                     aria-label="Edit user"
                                                 >
                                                     <Edit className="size-4" />
                                                 </button>
 
+                                              </CustomTooltip>
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger render={<button
                                                         type="button"
@@ -510,6 +534,11 @@ export default function ManageUser() {
                 )}
             </div>
 
+            <UserDetailsDialog
+                open={isDetailsOpen}
+                onOpenChange={setIsDetailsOpen}
+                userById={selectedUserById}
+            />
 
             <UserFormDialog
                 open={isDialogOpen}

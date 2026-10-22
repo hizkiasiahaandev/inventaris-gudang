@@ -12,6 +12,7 @@ import type {
 
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogDescription,
     DialogFooter,
@@ -25,6 +26,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { ImagePlus, Info, Loader, Plus, Save, X } from "lucide-react";
 import type { Mode } from "@/types/mode.type";
+import { ErrorMessage } from "@/utils/error";
 
 type CompanyProfileModalProps = {
     mode: Mode;
@@ -249,10 +251,7 @@ export default function CompanyProfileModal({
                                 />
 
                                 {errors.name && (
-                                    <p className="flex items-center gap-1 text-xs text-destructive">
-                                        <Info size={13} />
-                                        {errors.name.message}
-                                    </p>
+                                   <ErrorMessage message={errors.name.message} />
                                 )}
                             </div>
                         </div>
@@ -275,10 +274,7 @@ export default function CompanyProfileModal({
                         />
 
                         {errors.email && (
-                            <p className="text-xs flex items-center gap-1 text-destructive">
-                                <Info size={13} />
-                                {errors.email.message}
-                            </p>
+                           <ErrorMessage message={errors.email.message} />
                         )}
                     </div>
 
@@ -338,14 +334,17 @@ export default function CompanyProfileModal({
                     )}
 
                     <DialogFooter>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            disabled={loading}
-                            onClick={onClose}
-                        >
-                            Batal
-                        </Button>
+                        <DialogClose
+                            render={
+                                <Button
+                                type="button"
+                                variant="outline"
+                                disabled={loading}
+                                >
+                                    Cancel
+                                </Button>
+                            }
+                        />
 
                         <Button type="submit" className="bg-slate-800 hover:bg-slate-900 transition-colors duration-300  focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 border border-slate-300/80" disabled={loading}>
                             {loading ? (

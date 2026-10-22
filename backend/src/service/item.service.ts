@@ -59,6 +59,26 @@ export const itemService = {
                     },
                 },
             },
+            include: {
+                category:{
+                    select :{
+                        id: true,
+                        name: true,
+                    },
+                },
+                supplier:{
+                    select :{
+                        id:true,
+                        name: true,
+                    },
+                },
+                createdBy: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
+            },
         });
     },
 
@@ -66,7 +86,6 @@ export const itemService = {
         id: number,
         sku: string,
         name: string,
-        stock: number,
         minimumStock: number,
         unit: string,
         purchasePrice: number,
@@ -78,7 +97,6 @@ export const itemService = {
         if (
             !sku ||
             !name ||
-            stock === undefined ||
             minimumStock === undefined ||
             !unit ||
             purchasePrice === undefined ||
@@ -87,11 +105,11 @@ export const itemService = {
             updatedById === undefined
         ) {
             throw new Error(
-                "SKU, name, stock, minimum stock, unit, purchase price, category ID, supplier ID, and updater ID are required."
+                "SKU, name, minimum stock, unit, purchase price, category ID, supplier ID, and updater ID are required."
             );
         };
 
-        if (stock < 0 || minimumStock < 0 || purchasePrice < 0) {
+        if (minimumStock < 0 || purchasePrice < 0) {
             throw new Error("Stock, minimum stock, and purchase price cannot be negative.");
         };
 
@@ -119,7 +137,6 @@ export const itemService = {
             data: {
                 sku,
                 name,
-                stock,
                 minimumStock,
                 unit,
                 purchasePrice,
@@ -144,6 +161,18 @@ export const itemService = {
                 },
             },
             include: {
+                category:{
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
+                supplier: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
                 createdBy: {
                     select: {
                         id: true,
@@ -247,6 +276,32 @@ export const itemService = {
                 orderBy: {
                     createdAt: "desc",
                 },
+                include :{
+                    category: {
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
+                    supplier:{
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
+                    createdBy: {
+                        select: {
+                            id:true,
+                            name: true,
+                        },
+                    },
+                    updatedBy: {
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
+                },
             }),
 
             prisma.item.count({
@@ -269,8 +324,18 @@ export const itemService = {
         const item = await prisma.item.findUnique({
             where: { id },
             include: {
-                category: true,
-                supplier: true,
+                category: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
+                supplier: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
                 createdBy: {
                     select: {
                         id: true,
@@ -289,7 +354,6 @@ export const itemService = {
         if (!item) {
             throw new Error("Item not found.");
         }
-
 
         return item;
     },

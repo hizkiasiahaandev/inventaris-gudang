@@ -15,6 +15,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import SupplierDetailsDialog from "./SupplierDetailsDialog";
 import axios from "axios";
 import type { ErrorResponse } from "@/types/api";
+import CustomTooltip from "@/components/common/CustomTooltip";
 
 export default function ManageSupplier() {
     const [suppliers, setSuppliers] = useState<SupplierData[]>([]);
@@ -191,13 +192,15 @@ export default function ManageSupplier() {
                     </p>
                 </div>
 
-                <button
-                    onClick={handleCreate}
-                    className="inline-flex transition-all duration-100 items-center gap-2 px-4 bg-slate-800 rounded-lg shadow-sm hover:shadow-xl text-sm text-white focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 font-medium shadow-slate-600/15 border-slate-300/50 border py-2"
-                >
-                    <Plus size={14} />
-                    Add Supplier
-                </button>
+                <CustomTooltip content="Add Supplier">
+                    <button
+                        onClick={handleCreate}
+                        className="inline-flex transition-all duration-100 items-center gap-2 px-4 bg-slate-800 rounded-lg shadow-sm hover:shadow-xl text-sm text-white focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 font-medium shadow-slate-600/15 border-slate-300/50 border py-2"
+                    >
+                        <Plus size={14} />
+                        Add Supplier
+                    </button>
+                </CustomTooltip>
             </div>
 
             <div className="bg-white shadow-sm rounded-xl border border-slate-200 overflow-hidden">
@@ -371,25 +374,27 @@ export default function ManageSupplier() {
 
                                         <td className="whitespace-nowrap px-3 py-3 text-right">
                                             <div className="flex items-center justify-end gap-2">
-                                                <button
-                                                    type="button"
-                                                    className="rounded-md p-2 text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-900"
-                                                    title="See supplier details"
-                                                    onClick={() => handleViewDetails(supplier)}
-                                                    aria-label="See supplier details"
-                                                >
-                                                    <Eye className="size-4" />
-                                                </button>
+                                                <CustomTooltip content="See supplier details">
+                                                    <button
+                                                        type="button"
+                                                        className="rounded-md p-2 text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-900"
+                                                        onClick={() => handleViewDetails(supplier)}
+                                                        aria-label="See supplier details"
+                                                    >
+                                                        <Eye className="size-4" />
+                                                    </button>
+                                                </CustomTooltip>
 
-                                                <button
+                                               <CustomTooltip content="Edit supplier">
+                                                 <button
                                                     type="button"
                                                     onClick={() => handleEdit(supplier)}
                                                     className="rounded-md p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
-                                                    title="Edit supplier"
                                                     aria-label="Edit supplier"
                                                 >
                                                     <Edit className="size-4" />
                                                 </button>
+                                               </CustomTooltip>
 
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger render={<button
@@ -525,4 +530,4 @@ export default function ManageSupplier() {
             />
         </div>
     );
-}
+};

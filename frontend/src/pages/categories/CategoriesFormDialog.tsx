@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { categoryService } from "@/services/category.service";
 import type { ErrorResponse } from "@/types/api";
 import type { CategoryFormValues, CategoryData, createCategory, updateCategory } from "@/types/category.types";
 import type { Mode } from "@/types/mode.type";
+import { ErrorMessage } from "@/utils/error";
 import axios from "axios";
-import { Info, Loader, Plus, Save } from "lucide-react";
+import {  Loader, Plus, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -135,10 +136,7 @@ export default function CategoriesFormDialog({
                             })}
                         />
                         {errors.name && (
-                            <p role="alert" className="flex items-center text-xs gap-1 text-destructive">
-                                <Info size={13} />
-                                {errors.name.message}
-                            </p>
+                            <ErrorMessage message={errors.name.message} />
                         )}
                     </div>
 
@@ -149,21 +147,19 @@ export default function CategoriesFormDialog({
                             placeholder="Enter a description"
                             { ...register("description")}
                         />
-                        {errors.description && (
-                            <p role="alert" className="flex items-center gap-1 text-destructive text-xs">
-                                <Info size={13} />
-                            </p>
-                        )}
                     </div>
                     <DialogFooter>
+                       <DialogClose
+                       render={
                         <Button
-                            type="button"
-                            variant="outline"
-                            disabled={isSubmitting}
-                            onClick={() => onOpenChange(false)}
+                        variant="outline"
+                        type="button"
+                        disabled={isSubmitting}
                         >
                             Cancel
                         </Button>
+                       }
+                       />
 
                         <Button
                             type="submit"

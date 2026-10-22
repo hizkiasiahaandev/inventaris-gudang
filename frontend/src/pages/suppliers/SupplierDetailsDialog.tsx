@@ -1,9 +1,12 @@
 import Spinner from "@/components/common/Spinner";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogDescription,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
@@ -50,7 +53,9 @@ export default function SupplierDetailsDialog({
 
                 setError(message);
             } finally {
-                setIsLoading(false);
+                setTimeout(() => {
+                    setIsLoading(false);
+                }, 300);
             }
         };
 
@@ -59,7 +64,7 @@ export default function SupplierDetailsDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-lg">
+            <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg">
                 <DialogHeader>
                     <DialogTitle>Supplier Details</DialogTitle>
                     <DialogDescription>
@@ -163,13 +168,13 @@ export default function SupplierDetailsDialog({
 
                         <Separator />
 
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <p className="text-sm text-slate-500">
                                     Created At
                                 </p>
                                 <p className="text-sm font-medium">
-                                    {date(supplier.createdAt)}
+                                    {supplier.createdAt ? date(supplier.createdAt) : "-"}
                                 </p>
                             </div>
 
@@ -178,13 +183,25 @@ export default function SupplierDetailsDialog({
                                     Updated At
                                 </p>
                                 <p className="text-sm font-medium">
-                                    {date(supplier.updatedAt)}
+                                    {supplier.updatedAt ? date(supplier.updatedAt) : "-"}
                                 </p>
                             </div>
                         </div>
                     </div>
                 ) : null}
+                <DialogFooter>
+                    <DialogClose
+                    render={
+                        <Button
+                        type="button"
+                        variant="outline"
+                        >
+                            Cancel
+                        </Button>
+                    }
+                    />
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );
-}
+};

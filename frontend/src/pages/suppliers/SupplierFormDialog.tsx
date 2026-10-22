@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supplierService } from "@/services/supplier.service";
 import type { ErrorResponse } from "@/types/api";
 import type { Mode } from "@/types/mode.type";
 import type { SupplierFormValues, createSupplier, SupplierData, updateSupplier } from "@/types/supplier.types";
+import { ErrorMessage } from "@/utils/error";
 import axios from "axios";
-import { Info, Loader, Plus, Save } from "lucide-react";
+import { Loader, Plus, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -151,10 +152,7 @@ export default function SupplierFormDialog({
                             })}
                         />
                         {errors.name && (
-                            <p role="alert" className="flex items-center text-xs gap-1 text-destructive">
-                                <Info size={13} />
-                                {errors.name.message}
-                            </p>
+                            <ErrorMessage message={errors.name.message} />
                         )}
                     </div>
 
@@ -195,15 +193,17 @@ export default function SupplierFormDialog({
                     </div>
 
                     <DialogFooter>
-                        <Button
+                        <DialogClose
+                        render={
+                            <Button
                             type="button"
                             variant="outline"
                             disabled={isSubmitting}
-                            onClick={() => onOpenChange(false)}
-                        >
-                            Cancel
-                        </Button>
-
+                            >
+                                Cancel
+                            </Button>
+                        }
+                        />
                         <Button
                             type="submit"
                             className="bg-slate-800 hover:bg-slate-900 transition-colors duration-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 border border-slate-300/80"

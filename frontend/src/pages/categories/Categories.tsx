@@ -14,6 +14,7 @@ import axios from "axios";
 import type { ErrorResponse } from "@/types/api";
 import CategoryDetailsDialog from "./CategoryDetailsDialog";
 import { Badge } from "@/components/ui/badge";
+import CustomTooltip from "@/components/common/CustomTooltip";
 
 export default function ManageCategories() {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -33,7 +34,7 @@ export default function ManageCategories() {
 
     const [totalCategories, setTotalCategories] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
- 
+
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
@@ -200,13 +201,15 @@ export default function ManageCategories() {
                     </p>
                 </div>
 
-                <button
-                    onClick={handleCreate}
-                    className="inline-flex transition-all duration-100 items-center gap-2 px-4 bg-slate-800 rounded-lg shadow-sm hover:shadow-xl text-sm text-white focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 font-medium shadow-slate-600/15 border-slate-300/50 border py-2"
-                >
-                    <Plus size={14} />
-                    Add Category
-                </button>
+                <CustomTooltip content="Add Category">
+                    <button
+                        onClick={handleCreate}
+                        className="inline-flex transition-all duration-100 items-center gap-2 px-4 bg-slate-800 rounded-lg shadow-sm hover:shadow-xl text-sm text-white focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 font-medium shadow-slate-600/15 border-slate-300/50 border py-2"
+                    >
+                        <Plus size={14} />
+                        Add Category
+                    </button>
+                </CustomTooltip>
             </div>
 
             <div className="bg-white shadow-sm rounded-xl border border-slate-200 overflow-hidden">
@@ -369,25 +372,27 @@ export default function ManageCategories() {
 
                                         <td className="whitespace-nowrap px-3 py-3 text-right">
                                             <div className="flex items-center justify-end gap-2">
-                                                <button
-                                                    type="button"
-                                                    className="rounded-md p-2 text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-900"
-                                                    title="See category details"
-                                                    onClick={() => handleViewDetails(category)}
-                                                    aria-label="See category details"
-                                                >
-                                                    <Eye className="size-4" />
-                                                </button>
+                                                <CustomTooltip content="See category details">
+                                                    <button
+                                                        type="button"
+                                                        className="rounded-md p-2 text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-900"
+                                                        onClick={() => handleViewDetails(category)}
+                                                        aria-label="See category details"
+                                                    >
+                                                        <Eye className="size-4" />
+                                                    </button>
+                                                </CustomTooltip>
 
-                                                <button
+                                              <CustomTooltip content="Edit category">
+                                                  <button
                                                     type="button"
                                                     onClick={() => handleEdit(category)}
                                                     className="rounded-md p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
-                                                    title="Edit category"
                                                     aria-label="Edit category"
                                                 >
                                                     <Edit className="size-4" />
                                                 </button>
+                                              </CustomTooltip>
 
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger render={<button

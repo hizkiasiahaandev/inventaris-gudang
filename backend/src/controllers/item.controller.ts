@@ -142,7 +142,6 @@ export const itemController = {
             const {
                 sku,
                 name,
-                stock,
                 minimumStock,
                 unit,
                 purchasePrice,
@@ -155,7 +154,6 @@ export const itemController = {
                 id,
                 sku,
                 name,
-                stock,
                 minimumStock,
                 unit,
                 purchasePrice,
@@ -164,6 +162,8 @@ export const itemController = {
                 updatedById,
                 description,
             );
+
+            console.log(item);
 
             res.status(StatusCodes.OK).json({
                 success: true,

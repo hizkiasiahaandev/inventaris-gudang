@@ -6,6 +6,7 @@ import { Box, Edit, Plus } from "lucide-react"
 import { useEffect, useState } from "react"
 import CompanyProfileModal from "./CompanyProfileModal";
 import type { Mode } from "@/types/mode.type";
+import CustomTooltip from "@/components/common/CustomTooltip";
 
 export default function CompanyProfile() {
     const [company, setCompany] = useState<CompanyProfileService | null>(null);
@@ -35,7 +36,7 @@ export default function CompanyProfile() {
         } finally {
             setTimeout(() => {
                 setIsLoading(false);
-            },  300);
+            }, 300);
         }
     };
 
@@ -62,12 +63,14 @@ export default function CompanyProfile() {
                     <p className="text-[14px] text-slate-500">Setting your company profile</p>
                 </div>
                 {!company && (
-                    <button
-                        onClick={handleAdd}
-                        className="inline-flex items-center gap-2 px-4 py-2 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 text-sm font-medium text-white bg-slate-800 shadow-slate-600/15 border-slate-300/50 border hover:shadow-xl shadow-sm  rounded-lg">
-                        <Plus size={14} />
-                        Add Company
-                    </button>
+                    <CustomTooltip content="Add Company">
+                        <button
+                            onClick={handleAdd}
+                            className="inline-flex items-center gap-2 px-4 py-2 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 text-sm font-medium text-white bg-slate-800 shadow-slate-600/15 border-slate-300/50 border hover:shadow-xl shadow-sm  rounded-lg">
+                            <Plus size={14} />
+                            Add Company
+                        </button>
+                    </CustomTooltip>
                 )}
             </div>
 
@@ -97,10 +100,12 @@ export default function CompanyProfile() {
                                         {company.website ? getWebsiteHostname(company.website) : "-"}
                                     </p>
                                 </div>
-                                <button onClick={handleEdit} className="inline-flex focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 items-center border border-slate-300/50 gap-2 px-3 py-1.5 text-sm font-medium text-white bg-slate-800 hover:shadow-xl shadow-sm shadow-slate-600/15 transition duration-300 rounded-lg">
+                               <CustomTooltip content="Edit company">
+                                 <button onClick={handleEdit} className="inline-flex focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 items-center border border-slate-300/50 gap-2 px-3 py-1.5 text-sm font-medium text-white bg-slate-800 hover:shadow-xl shadow-sm shadow-slate-600/15 transition duration-300 rounded-lg">
                                     <Edit size={14} />
                                     Edit
                                 </button>
+                               </CustomTooltip>
                             </div>
                             {company.description && (
                                 <p className="text-sm text-slate-600 leading-relaxed mt-3">

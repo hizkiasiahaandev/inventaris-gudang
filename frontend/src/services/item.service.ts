@@ -1,8 +1,8 @@
 import { api } from "@/api/axios";
-import type { createItem, getItems } from "@/types/item.types";
+import type { CreateItem, GetItemsParams, UpdateItem } from "@/types/item.types";
 
 export const itemService = {
-    async createItem(data: createItem) {
+    async createItem(data: CreateItem) {
         const response = await api.post("/item", data);
         return response.data;
     },
@@ -17,10 +17,20 @@ export const itemService = {
         return response.data;
     },
 
-    async getItems(params: getItems) {
+    async getItems(params: GetItemsParams) {
         const response = await api.get("/item", {
             params,
         });
+        return response.data;
+    },
+
+    async updateItem(data: UpdateItem, id: number) {
+        const response = await api.put(`/item/${id}`, data);
+        return response.data;
+    },
+
+    async getItemById(id: number) {
+        const response = await api.get(`/item/${id}`);
         return response.data;
     },
 };

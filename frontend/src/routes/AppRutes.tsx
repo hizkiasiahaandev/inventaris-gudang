@@ -7,6 +7,7 @@ import ManageUser from "@/pages/users/User";
 import ManageSupplier from "@/pages/suppliers/Supplier";
 import ManageCategories from "@/pages/categories/Categories";
 import ManageItems from "@/pages/items/Items";
+import StockMovements from "@/pages/stock/Stock";
 
 export default function AppRoutes() {
   return (
@@ -19,6 +20,7 @@ export default function AppRoutes() {
         <Route path="/categories" element={<ManageCategories />} />
         <Route path="/items" element={<ManageItems />} />
         <Route path="/suppliers" element={<ManageSupplier />} />
+        <Route path="/stock" element={<StockMovements />} />
         <Route path="/company" element={<CompanyProfile />} />
       </Route>
     </Routes>

@@ -104,7 +104,7 @@ export const stockService = {
     },
 
 
-    async getStockMovemnts(
+    async getStockMovements(
         page: number,
         limit: number,
         type?: StockMovementType,
@@ -250,6 +250,21 @@ export const stockService = {
                 },
                 data: {
                     status: StockMovementStatus.CANCELLED,
+                },
+                include : {
+                    item: {
+                        select: {
+                            id: true,
+                            sku: true,
+                            name: true,
+                        },
+                    },
+                    createdBy: {
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
                 },
             });
 

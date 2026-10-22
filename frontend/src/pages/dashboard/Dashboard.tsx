@@ -5,13 +5,18 @@ import type { DashboardSummary } from "@/types/dashboard.types";
 import { statsData } from "@/types/dashboard/statsData";
 import { date } from "@/utils/date";
 import axios from "axios";
-import { PackageMinus, PackagePlus } from "lucide-react";
+import { ArrowRight, PackageMinus, PackagePlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import StockMovementsChart from "./StockMovementsChart";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 export default function MainDashboard() {
     const [summary, setSummary] = useState<DashboardSummary | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+
+
+    const navigate = useNavigate();
 
     const data = statsData({
         totalItems: summary?.totalItems ?? 0,
@@ -125,24 +130,35 @@ export default function MainDashboard() {
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
 
                 <div className="flex flex-col gap-3 rounded-xl border border-slate-200/80 bg-white p-5 shadow-xs transition-all hover:border-slate-300 hover:shadow-sm">
-                    <div>
-                        <h2 className="text-sm font-semibold  text-slate-800">
-                            Low Stock Items
-                        </h2>
-                        <p className="text-xs text-slate-500">
-                            Products that need immediate restocking
-                        </p>
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h2 className="text-sm font-semibold  text-slate-800">
+                                Low Stock Items
+                            </h2>
+                            <p className="text-xs text-slate-500">
+                                Products that need immediate restocking
+                            </p>
+                        </div>
+                        <Button
+                            variant="outline"
+                            type="button"
+                            size="sm"
+                            onClick={() => navigate("/items")}
+                        >
+                            <ArrowRight />
+                            See details
+                        </Button>
                     </div>
-                    <div className="relative shadow-sm  overflow-x-auto overflow-hidden">
+                    <div className="relative shadow-sm  max-h-[25vh] overflow-x-auto overflow-y-auto  overflow-hidden">
                         <table className="w-full  text-left text-xs">
                             <thead className="text-white font-semibold">
                                 <tr className="bg-slate-800">
                                     {dashboadLowStock.map((col) => (
                                         <th key={col}
-                                        className={`whitespace-nowrap px-3 py-2.5 ${col === "Unit"
-                                            ? "text-right"
-                                            : ""
-                                        }`}
+                                            className={`whitespace-nowrap px-3 py-2.5 ${col === "Unit"
+                                                ? "text-right"
+                                                : ""
+                                                }`}
                                         >
                                             {col}
                                         </th>
@@ -162,7 +178,7 @@ export default function MainDashboard() {
                                             key={item.id}
                                             className="border-b border-slate-100 transition-colors hover:bg-slate-50"
                                         >
-                                            <td className="whitespace-nowrap px-3 py-2.5 font-mono text-[12px] text-slate-500">{item.sku}</td>
+                                            <td className="whitespace-nowrap px-3 py-2.5 font-mono  text-slate-500">{item.sku}</td>
                                             <td className="whitespace-nowrap px-3 py-2.5 text-slate-800 font-semibold">{item.name}</td>
                                             <td className="whitespace-nowrap px-3 py-2.5 font-semibold text-destructive">{item.stock}</td>
                                             <td className="whitespace-nowrap px-3 py-2.5 text-slate-500">{item.minimumStock}</td>
@@ -183,16 +199,27 @@ export default function MainDashboard() {
                 </div>
 
                 <div className="flex flex-col gap-3 rounded-xl border border-slate-200/80 bg-white p-5 shadow-xs transition-all hover:border-slate-300 hover:shadow-sm">
-                    <div>
-                        <h2 className="text-sm font-semibold  text-slate-800">
-                            Recent Stock Movements
-                        </h2>
-                        <p className="text-xs text-slate-500">
-                            Latest incoming and outgoing stock activity
-                        </p>
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h2 className="text-sm font-semibold  text-slate-800">
+                                Recent Stock Movements
+                            </h2>
+                            <p className="text-xs text-slate-500">
+                                Latest incoming and outgoing stock activity
+                            </p>
+                        </div>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => navigate("/stock")}
+                        >
+                            <ArrowRight />
+                            See details
+                        </Button>
                     </div>
 
-                    <div className="overflow-x-auto shadow-sm overflow-hidden">
+                    <div className="overflow-x-auto overflow-y-auto max-h-[25vh] shadow-sm overflow-hidden">
                         <table className="w-full text-left text-xs">
                             <thead className="text-white font-semibold">
                                 <tr className="bg-slate-800">
@@ -200,7 +227,7 @@ export default function MainDashboard() {
                                         <th key={col} className={`whitespace-nowrap px-3 py-2.5 ${col === "Date"
                                             ? "text-right"
                                             : ""
-                                        }`}>
+                                            }`}>
                                             {col}
                                         </th>
                                     ))}
@@ -220,10 +247,10 @@ export default function MainDashboard() {
                                             className="border-b border-slate-100 last:border-0 hover:bg-gray-50 [&>td]:px-3 [&>td]:py-2"
                                         >
                                             <td className="whitespace-nowrap px-3 py-2.5">
-                                                <div className="font-medium  text-slate-800">
+                                                <div className="font-semibold text-slate-800">
                                                     {mv.item.name}
                                                 </div>
-                                                <div className="font-mono text-[12px] text-slate-500">
+                                                <div className="font-mono text-slate-500">
                                                     {mv.item.sku}
                                                 </div>
                                             </td>

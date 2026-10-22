@@ -47,7 +47,7 @@ export const stockController = {
                 ? Number(req.query.itemId)
                 : undefined
 
-            const result = await stockService.getStockMovemnts(
+            const result = await stockService.getStockMovements(
                 page,
                 limit,
                 type,
