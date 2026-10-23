@@ -13,6 +13,20 @@ router.post(
 );
 
 router.get(
+    "/history",
+    authMiddleware,
+    roleMiddleware("ADMIN", "STAFF"),
+    stockController.getStockMovementsHistory
+);
+
+router.get(
+    "/history/export",
+    authMiddleware,
+    roleMiddleware("ADMIN", "STAFF"),
+    stockController.exportStockMovementsHistory
+);
+
+router.get(
     "/",
     authMiddleware,
     roleMiddleware("ADMIN", "STAFF"),
@@ -32,6 +46,7 @@ router.patch(
     roleMiddleware("ADMIN", "STAFF"),
     stockController.cancelStockMovement
 );
+
 
 
 

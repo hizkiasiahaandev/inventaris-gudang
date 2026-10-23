@@ -7,7 +7,7 @@ import { Info, Plus, Search } from "lucide-react";
 import { useState } from "react";
 
 export default function StockMovements() {
-    const [isLoading, setIsLoading] = useState(false);
+    const [loading, seIsLoading] = useState(false);
     const [error, setError] = useState("");
     const [stocks, setStocks] = useState<StockMovementData[]>([]);
 
@@ -31,7 +31,6 @@ export default function StockMovements() {
         { key: "status", label: "Status" },
         { key: "note", label: "Note" },
         { key: "quantity", label: "Quantity" },
-        { key: "createdById", label: "CreatedById" },
         { key: "createdBy", label: "CreatedBy" },
         { key: "createdAt", label: "CreatedAt" },
         { key: "updatedAt", label: "UpdatedAt" },
@@ -57,7 +56,7 @@ export default function StockMovements() {
                         className="inline-flex items-center gap-2 rounded-lg border border-slate-300/50 bg-slate-800 px-4 py-2 text-sm font-medium text-white shadow-sm shadow-slate-600/15 transition-all duration-100 hover:shadow-xl focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
                     >
                         <Plus size={14} />
-                        Create Movement
+                        Create
                     </button>
                 </CustomTooltip>
             </div>
@@ -96,7 +95,7 @@ export default function StockMovements() {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectLabel>Type movement status </SelectLabel>
+                                    <SelectLabel >Type movement status </SelectLabel>
                                     {stockTypeStatus.map((type) => (
                                         <SelectItem key={type.value} value={type.value}>
                                             {type.label}
@@ -123,7 +122,7 @@ export default function StockMovements() {
                             </tr>
                         </thead>
                         <tbody>
-                            {isLoading ? (
+                            {loading ? (
                                 <tr>
                                     <td
                                         colSpan={stockColumns.length}

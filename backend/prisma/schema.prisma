@@ -27,9 +27,11 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  createdItems          Item[]          @relation("ItemCreatedBy")
-  updatedItems          Item[]          @relation("ItemUpdatedBy")
-  createdStockMovements StockMovement[] @relation("StockMovementCreatedBy")
+  createdItems Item[] @relation("ItemCreatedBy")
+  updatedItems Item[] @relation("ItemUpdatedBy")
+
+  createdStockMovements    StockMovement[] @relation("StockMovementCreatedBy")
+  StockMovementCancelledBy StockMovement[] @relation("StockMovementCancelledBy")
 
   @@map("Users")
 }
@@ -127,8 +129,12 @@ model StockMovement {
   createdById Int
   createdBy   User @relation("StockMovementCreatedBy", fields: [createdById], references: [id])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  cancelledById Int?
+  cancelledBy   User?    @relation("StockMovementCancelledBy", fields: [cancelledById], references: [id])
+
+  cancelledAt DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@map("stock_movements")
 }

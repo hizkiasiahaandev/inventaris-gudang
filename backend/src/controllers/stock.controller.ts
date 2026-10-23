@@ -40,7 +40,7 @@ export const stockController = {
         try {
             const page = Number(req.query.page) || 1;
             const limit = Number(req.query.limit) || 10;
-
+            const search = req.query.search as string | undefined;
             const type = req.query.type as StockMovementType | undefined;
             const status = req.query.status as StockMovementStatus | undefined;
             const itemId = req.query.itemId
@@ -50,6 +50,7 @@ export const stockController = {
             const result = await stockService.getStockMovements(
                 page,
                 limit,
+                search,
                 type,
                 status,
                 itemId
@@ -97,12 +98,16 @@ export const stockController = {
     ) {
         try {
             const id = Number(req.params.id);
+            const cancelledById = Number(req.user?.userId)
 
             if (!Number.isInteger(id) || id <= 0) {
                 throw new Error("Invalid stock movement ID");
             }
 
-            const result = await stockService.cancelStockMovement(id);
+            const result = await stockService.cancelStockMovement(
+                id,
+                cancelledById
+            );
 
             res.status(StatusCodes.OK).json({
                 success: true,
@@ -113,6 +118,86 @@ export const stockController = {
             res.status(StatusCodes.BAD_REQUEST).json({
                 success: false,
                 message: error instanceof Error ? error.message : "Failed to cancel stock movement",
+            });
+        };
+    },
+
+    async getStockMovementsHistory(
+        req: Request,
+        res: Response
+    ) {
+        try {
+            const page = Number(req.query.page) || 1;
+            const limit = Number(req.query.limit) || 10;
+
+            const type = req.query.type as StockMovementType | undefined;
+            const status = req.query.status as StockMovementStatus | undefined;
+            const search = req.query.search as string | undefined;
+            const fromDate = req.query.fromDate as string | undefined;
+            const toDate = req.query.toDate as string | undefined;
+
+
+            const result = await stockService.getStockMovementsHistory(
+                page,
+                limit,
+                type,
+                status,
+                search,
+                fromDate,
+                toDate,
+            );
+
+            res.status(StatusCodes.OK).json({
+                success: true,
+                message: "Stockmovements History successfully retrieved",
+                data: result
+            });
+        } catch (error) {
+            res.status(StatusCodes.BAD_REQUEST).json({
+                success: false,
+                message: error instanceof Error ? error.message : "Failed to get stockmovements history"
+            });
+        };
+    },
+
+    async exportStockMovementsHistory(
+        req: Request,
+        res: Response
+    ) {
+        try {
+            const type = req.query.type as StockMovementType | undefined;
+            const status = req.query.status as StockMovementStatus | undefined;
+            const search = req.query.search as string | undefined;
+
+            const fromDate = req.query.fromDate as string | undefined;
+            const toDate = req.query.toDate as string | undefined;
+
+            const buffer = await stockService.exportStockMovementsHistory(
+                type,
+                status,
+                search,
+                fromDate,
+                toDate,
+            );
+
+            res.setHeader(
+                "Content-Type",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            );
+
+            res.setHeader(
+                "Content-Disposition",
+                'attachment; filename="stock-movement-history.xlsx"',
+            );
+
+            return res.status(StatusCodes.OK).send(buffer);
+        } catch (error) {
+            console.error("Export stock movement history:", error);
+            
+
+            res.status(StatusCodes.BAD_REQUEST).json({
+                success: false,
+                message: error instanceof Error ? error.message : "Failed to export stock movement history",
             });
         };
     },

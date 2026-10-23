@@ -1,6 +1,7 @@
 import { Prisma } from "../../generated/prisma/client";
 import { StockMovementStatus, StockMovementType } from "../../generated/prisma/enums";
 import { prisma } from "../lib/prisma";
+import ExcelJS from "exceljs"
 
 export const stockService = {
     async createStockMovement(
@@ -107,6 +108,7 @@ export const stockService = {
     async getStockMovements(
         page: number,
         limit: number,
+        search?: string,
         type?: StockMovementType,
         status?: StockMovementStatus,
         itemId?: number,
@@ -116,7 +118,14 @@ export const stockService = {
         const where: Prisma.StockMovementWhereInput = {
             ...(type !== undefined && { type }),
             ...(status !== undefined && { status }),
-            ...(itemId !== undefined && { itemId })
+            ...(itemId !== undefined && { itemId }),
+            ...(search && {
+                item: {
+                    name: {
+                        contains: search,
+                    },
+                },
+            }),
         };
 
         if (
@@ -205,13 +214,13 @@ export const stockService = {
         });
 
         if (!movement) {
-             throw new Error("Stock movement not found");
+            throw new Error("Stock movement not found");
         }
 
         return movement;
     },
 
-    async cancelStockMovement(id: number) {
+    async cancelStockMovement(id: number, userId: number) {
         const movement = await prisma.stockMovement.findUnique({
             where: {
                 id,
@@ -219,6 +228,7 @@ export const stockService = {
             include: {
                 item: true,
             },
+
         });
 
         if (!movement) {
@@ -250,8 +260,10 @@ export const stockService = {
                 },
                 data: {
                     status: StockMovementStatus.CANCELLED,
+                    cancelledById: userId,
+                    cancelledAt: new Date(),
                 },
-                include : {
+                include: {
                     item: {
                         select: {
                             id: true,
@@ -265,6 +277,13 @@ export const stockService = {
                             name: true,
                         },
                     },
+                    cancelledBy: {
+                        select: {
+                            id: true,
+                            name: true,
+                        }
+                    },
+
                 },
             });
 
@@ -282,5 +301,217 @@ export const stockService = {
                 item: updateItem,
             };
         });
+    },
+
+    async getStockMovementsHistory(
+        page: number,
+        limit: number,
+        type?: StockMovementType,
+        status?: StockMovementStatus,
+        search?: string,
+        fromDate?: string,
+        toDate?: string,
+    ) {
+        const skip = (page - 1) * limit;
+
+        const where: Prisma.StockMovementWhereInput = {
+            ...(type && { type }),
+            ...(status && { status }),
+
+            ...(search && {
+                item: {
+                    name: {
+                        contains: search,
+                    },
+                },
+            }),
+
+            ...((fromDate || toDate) && {
+                createdAt: {
+                    ...(fromDate && {
+                        gte: new Date(fromDate),
+                    }),
+                    ...(toDate && {
+                        lt: new Date(
+                            new Date(toDate).setDate(
+                                new Date(toDate).getDate() + 1
+                            ),
+                        ),
+                    }),
+                },
+            }),
+        };
+
+        const [data, total] = await Promise.all([
+            prisma.stockMovement.findMany({
+                where,
+                skip,
+                take: limit,
+                include: {
+                    item: {
+                        include: {
+                            category: true,
+                            supplier: true,
+                        },
+                    },
+                    createdBy: {
+                        select: {
+                            id: true,
+                            name: true,
+                        }
+                    },
+                    cancelledBy: {
+                        select: {
+                            id: true,
+                            name: true,
+                        },
+                    },
+                },
+                orderBy: {
+                    createdAt: "desc",
+                },
+            }),
+
+            prisma.stockMovement.count({ where }),
+        ]);
+
+        return {
+            data,
+            meta: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit),
+            },
+        };
+    },
+
+    async exportStockMovementsHistory(
+        type?: StockMovementType,
+        status?: StockMovementStatus,
+        search?: string,
+        fromDate?: string,
+        toDate?: string
+    ): Promise<Buffer> {
+        const where: Prisma.StockMovementWhereInput = {
+            ...(type && { type }),
+            ...(status && { status }),
+
+            ...(search && {
+                item: {
+                    name: {
+                        contains: search,
+                    },
+                },
+            }),
+
+            ...((fromDate || toDate) && {
+                createdAt: {
+                    ...(fromDate && {
+                        gte: new Date(fromDate),
+                    }),
+                    ...(toDate && {
+                        lt: new Date(
+                            new Date(toDate).setDate(
+                                new Date(toDate).getDate() + 1
+                            ),
+                        ),
+                    }),
+                },
+            }),
+        };
+
+        const data = await prisma.stockMovement.findMany({
+            where,
+            include: {
+                item: {
+                    select: {
+                        sku: true,
+                        name: true,
+                    },
+                },
+                createdBy: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
+                cancelledBy: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Stock Movement History");
+
+        worksheet.columns = [
+            { header: "Movement ID", key: "id", width: 15 },
+            { header: "Tanggal", key: "createdAt", width: 22 },
+            { header: "SKU", key: "sku", width: 18 },
+            { header: "Nama Barang", key: "itemName", width: 25 },
+            { header: "Tipe", key: "type", width: 12 },
+            { header: "Kuantitas", key: "quantity", width: 14 },
+            { header: "Status", key: "status", width: 16 },
+            { header: "Catatan", key: "note", width: 30 },
+            { header: "Dibuat Oleh", key: "createdBy", width: 22 },
+            { header: "Dibatalkan Oleh", key: "cancelledBy", width: 22 },
+            { header: "Tanggal Pembatalan", key: "cancelledAt", width: 22 },
+        ];
+
+        for (const movement of data) {
+            worksheet.addRow({
+                id: movement.id,
+                createdAt: movement.createdAt,
+                sku: movement.item.sku,
+                itemName: movement.item.name,
+                type: movement.type,
+                quantity: movement.quantity,
+                status: movement.status,
+                note: movement.note ?? "-",
+                createdBy: movement.cancelledBy?.name ?? "-",
+                cancelledBy: movement.cancelledBy?.name ?? "-",
+                cancelledAt: movement.cancelledAt ?? "-",
+            });
+        };
+
+        const header = worksheet.getRow(1);
+        header.font = {
+            bold: true,
+            color: { argb: "FFFFFFFF" },
+        },
+            header.fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "FF1F4E78" },
+            };
+            header.alignment = {
+                vertical: "middle",
+                horizontal: "center",
+            };
+            header.height = 25;
+
+            worksheet.getColumn("createdAt").numFmt = "dd/mm/yyyy hh:mm";
+            worksheet.getColumn("cancelledAt").numFmt = "dd/mm/yyyy hh:mm";
+
+            worksheet.getColumn("quantity").numFmt = "#,##0";
+
+            worksheet.autoFilter = {
+                from : "A1",
+                to: "K1",
+            };
+
+            worksheet.views = [
+                 { state: "frozen" , ySplit: 1},
+            ];
+
+            const buffer = await workbook.xlsx.writeBuffer();
+            return Buffer.from(buffer);
     },
 };
