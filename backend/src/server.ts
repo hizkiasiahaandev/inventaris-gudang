@@ -1,4 +1,4 @@
-
+import helmet from "helmet";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -10,7 +10,7 @@ const app = express();
 const allowedOrigins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "http://10.142.181.37:5173",
+    "http://10.226.4.37:5173",
 ];
 
 app.use(
@@ -22,10 +22,11 @@ app.use(
 
             return callback(new Error(`Origin tidak diizinkan: ${origin}`));
         },
-        credentials: true,
+        credentials: true
     })
 );
 
+app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 
