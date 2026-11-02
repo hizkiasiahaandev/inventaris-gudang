@@ -1,4 +1,6 @@
-type Role = "ADMIN" | "STAFF";
+import type { UserRole } from "./menus/menu";
+
+type Role = UserRole
 
 export interface User {
     id: number;

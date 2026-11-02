@@ -8,7 +8,7 @@ interface SpinnerProps {
 }
 
 export default function Spinner({
-    text = "Memuat...",
+    text,
     size = 64,
     color = "text-slate-800",
     fullScreen = false,

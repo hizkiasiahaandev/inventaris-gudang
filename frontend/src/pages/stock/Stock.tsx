@@ -23,8 +23,14 @@ export default function StockMovements() {
         { label: "Cancelled", value: "cancelled" }
     ];
 
+    type StockColumnTable = {
+        key: string;
+        label: string;
+        className?: string;
+    };
 
-    const stockColumns = [
+
+    const stockColumns: StockColumnTable[] = [
         { key: "sku", label: "SKU" },
         { key: "name", label: "Name" },
         { key: "type", label: "Type" },

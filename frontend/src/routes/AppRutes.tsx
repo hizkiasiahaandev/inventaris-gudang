@@ -12,8 +12,8 @@ import StockMovements from "@/pages/stock/Stock";
 export default function AppRoutes() {
   return (
     <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<LoginForm />} />
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/login" element={<LoginForm />} />
       <Route element={<DashboardLayout />}>
         <Route path="/dashboard" element={<MainDashboard />} />
         <Route path="/users" element={<ManageUser />} />

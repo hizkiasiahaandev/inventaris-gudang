@@ -6,11 +6,28 @@ import {
   ClipboardList,
   Users,
   Building2,
+  type LucideIcon,
+  ChartNoAxesCombined,
+  History,
 } from "lucide-react";
 
 export type UserRole = "ADMIN" | "STAFF";
 
-export const menuGroups = [
+type MenuItem = {
+  label: string;
+  desc: string;
+  path: string;
+  icon: LucideIcon;
+  roles: UserRole[];
+}
+
+
+type MenuGroup = {
+  title: string;
+  items: MenuItem[];
+};
+
+export const menuGroups: MenuGroup[] = [
   {
     title: "Overview",
     items: [
@@ -55,6 +72,26 @@ export const menuGroups = [
         roles: ["ADMIN", "STAFF"],
       },
     ],
+  },
+  {
+    title: "Monitoring",
+    items: [
+      {
+        label: "Stock Movement History",
+        desc: "Riwayat barang masuk dan keluar",
+        path: "/stock/history",
+        icon: History,
+        roles: ["ADMIN", "STAFF"],
+      },
+
+      {
+        label: "Reports",
+        desc: "Laporan dan analisis stok",
+        path: "/reports",
+        icon: ChartNoAxesCombined,
+        roles: ["ADMIN"],
+      },
+    ]
   },
   {
     title: "Administration",

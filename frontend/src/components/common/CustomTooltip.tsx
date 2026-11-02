@@ -1,7 +1,7 @@
 import type { ReactElement, ReactNode } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
-interface CustomTooltipProps {
+type CustomTooltipProps = {
     content: ReactNode;
     children: ReactElement;
 };

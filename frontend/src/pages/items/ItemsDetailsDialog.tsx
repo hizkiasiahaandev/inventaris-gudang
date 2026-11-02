@@ -24,7 +24,7 @@ export default function ItemDetailsDialog({
     itemId,
 }: ItemDetailsDialogProps) {
     const [item, setItem] = useState<ItemsData | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -32,10 +32,9 @@ export default function ItemDetailsDialog({
             return;
         }
 
-
         const fetchItem = async () => {
             try {
-                setIsLoading(true);
+                setLoading(true);
                 setError(null);
                 setItem(null);
 
@@ -51,7 +50,7 @@ export default function ItemDetailsDialog({
                 setError(message);
             } finally {
                 setTimeout(() => {
-                    setIsLoading(false);
+                    setLoading(false);
                 }, 300);
             };
         };
@@ -69,7 +68,7 @@ export default function ItemDetailsDialog({
                     </DialogDescription>
                 </DialogHeader>
 
-                {isLoading ? (
+                {loading ? (
                     <div className="py-8">
                         <Spinner text="Loading item details..." />
                     </div>

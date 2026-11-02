@@ -1,6 +1,10 @@
 import { Info } from "lucide-react";
 
-export function ErrorMessage({ message }: { message?: string }) {
+type ErrorMessageProps = {
+    message?: string
+}
+
+export function ErrorMessage({ message }: ErrorMessageProps) {
     if (!message) return null;
 
     return (
