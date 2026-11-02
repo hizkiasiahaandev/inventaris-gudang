@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import { stockService } from "../service/stock.service";
 import { StatusCodes } from "http-status-codes";
 import { StockMovementStatus, StockMovementType } from "../../generated/prisma/enums";
+import type { ReportPeriod } from "../types/report-period";
 
 export const stockController = {
     async createStockMovement(
@@ -193,11 +194,55 @@ export const stockController = {
             return res.status(StatusCodes.OK).send(buffer);
         } catch (error) {
             console.error("Export stock movement history:", error);
-            
+
 
             res.status(StatusCodes.BAD_REQUEST).json({
                 success: false,
                 message: error instanceof Error ? error.message : "Failed to export stock movement history",
+            });
+        };
+    },
+
+    async getStockMovementsReport(
+        req: Request,
+        res: Response
+    ) {
+        try {
+            const period = req.query.period ?? "7days";
+
+            const validPeriod: ReportPeriod[] = [
+                "7days",
+                "2weeks",
+                "1month"
+            ];
+
+            if (
+                typeof period !== "string" ||
+                !validPeriod.includes(
+                    period as (typeof validPeriod)[number]
+                )
+            ) {
+                res.status(StatusCodes.BAD_REQUEST).json({
+                    success: false,
+                    message: "Period must be 7 days, 2 weeks, or 1 month",
+                });
+            };
+
+            const result = await stockService.getStockMovementsReport(
+                period as (typeof validPeriod)[number]
+            );
+
+            res.status(StatusCodes.OK).json({
+                success: true,
+                message: "Stock movement report successfully retrieved",
+                data: result
+            });
+        } catch (error) {
+            res.status(StatusCodes.BAD_REQUEST).json({
+                success: false,
+                message: error instanceof Error
+                    ? error.message
+                    : "Failed to retrieve stock movement report",
             });
         };
     },

@@ -20,6 +20,14 @@ router.get(
 );
 
 router.get(
+    "/report",
+    authMiddleware,
+    roleMiddleware("ADMIN"),
+    stockController.getStockMovementsReport
+);
+
+
+router.get(
     "/history/export",
     authMiddleware,
     roleMiddleware("ADMIN", "STAFF"),

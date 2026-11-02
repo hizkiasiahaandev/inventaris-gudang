@@ -1,0 +1,1 @@
+export type ReportPeriod = "7days" | "2weeks" | "1month";
