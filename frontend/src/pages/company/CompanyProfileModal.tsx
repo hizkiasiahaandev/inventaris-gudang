@@ -1,9 +1,6 @@
-
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
 import { companyService } from "@/services/company.service";
-
 import type {
     CompanyProfileService,
     updateCompanyProfile,
@@ -75,7 +72,6 @@ export default function CompanyProfileModal({
         setLogoPreview(null);
         setValue("logo", "", { shouldValidate: true, shouldDirty: true });
     };
-
 
     const {
         register,

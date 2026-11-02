@@ -27,7 +27,7 @@ export default function UserFormDialog({
     user,
     onSuccess
 }: UserFormDialogProps) {
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
     const {
         register,
@@ -61,7 +61,7 @@ export default function UserFormDialog({
 
     const onSubmit = async (values: UserFormValues) => {
         try {
-            setIsSubmitting(true);
+            setSubmitting(true);
 
             if (mode === "create") {
                 const data: registerData = {
@@ -101,7 +101,7 @@ export default function UserFormDialog({
                 );
             };
         } finally {
-            setIsSubmitting(false);
+            setSubmitting(false);
         }
     };
 
@@ -189,7 +189,7 @@ export default function UserFormDialog({
                             <Button
                             type="button"
                             variant="outline"
-                            disabled={isSubmitting}
+                            disabled={submitting}
                             >
                                 Cancel
                             </Button>
@@ -198,9 +198,9 @@ export default function UserFormDialog({
                         <Button
                             type="submit"
                             className="bg-slate-800 hover:bg-slate-900 transition-colors duration-300  focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 border border-slate-300/80"
-                            disabled={isSubmitting}
+                            disabled={submitting}
                         >
-                            {isSubmitting ? (
+                            {submitting ? (
                                 <>
                                     <Loader className="size-4 animate-spin" />
                                     Savings...

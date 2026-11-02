@@ -13,9 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function MainDashboard() {
     const [summary, setSummary] = useState<DashboardSummary | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-
-
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     const data = statsData({
@@ -39,7 +37,7 @@ export default function MainDashboard() {
                 )
             } finally {
                 setTimeout(() => {
-                    setIsLoading(false);
+                    setLoading(false);
                 }, 300);
             };
         };
@@ -113,7 +111,7 @@ export default function MainDashboard() {
                             Latest incoming and outgoing stock activity (7 days)
                         </p>
                     </div>
-                    {isLoading ? (
+                    {loading ? (
                         <div className="flex h-64 items-center justify-center">
                             <Spinner text="Loading graphic" size={66} />
                         </div>
@@ -166,9 +164,9 @@ export default function MainDashboard() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {isLoading ? (
+                                {loading ? (
                                     <tr>
-                                        <td colSpan={5} className="px-3 py-6">
+                                        <td colSpan={dashboadLowStock.length} className="px-3 py-6">
                                             <Spinner text="Loading data" size={66} />
                                         </td>
                                     </tr>
@@ -234,9 +232,9 @@ export default function MainDashboard() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {isLoading ? (
+                                {loading ? (
                                     <tr>
-                                        <td colSpan={5} className="px-3 py-6">
+                                        <td colSpan={dashboadRecentStock.length} className="px-3 py-6">
                                             <Spinner text="Loading data" size={66} />
                                         </td>
                                     </tr>

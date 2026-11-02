@@ -5,11 +5,18 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import type { StockMovementData } from "@/types/stock.types";
 import { Info, Plus, Search } from "lucide-react";
 import { useState } from "react";
+import StockMovementsDialog from "./StockFormDialog";
 
 export default function StockMovements() {
-    const [loading, seIsLoading] = useState(false);
+    const [loading, seLoading] = useState(false);
     const [error, setError] = useState("");
     const [stocks, setStocks] = useState<StockMovementData[]>([]);
+
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const handleCreate = () => {
+        setDialogOpen(true);
+    };
 
     const stockType = [
         { label: "All", value: "all" },
@@ -59,6 +66,7 @@ export default function StockMovements() {
                 <CustomTooltip content="Create Stock Movement">
                     <button
                         type="button"
+                        onClick={handleCreate}
                         className="inline-flex items-center gap-2 rounded-lg border border-slate-300/50 bg-slate-800 px-4 py-2 text-sm font-medium text-white shadow-sm shadow-slate-600/15 transition-all duration-100 hover:shadow-xl focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
                     >
                         <Plus size={14} />
@@ -177,6 +185,11 @@ export default function StockMovements() {
                     </table>
                 </div>
             </div>
+
+            <StockMovementsDialog
+                open={dialogOpen}
+                onOpenChange={setDialogOpen}
+            />
         </div>
     );
 };

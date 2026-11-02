@@ -19,11 +19,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-
 import { itemService } from "@/services/item.service";
 import { categoryService } from "@/services/category.service";
 import { supplierService } from "@/services/supplier.service";
-
 import type { ErrorResponse } from "@/types/api";
 import type {
     ItemsFormValues,
@@ -32,7 +30,6 @@ import type {
     UpdateItem,
 } from "@/types/item.types";
 import type { Mode } from "@/types/mode.type";
-
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -60,9 +57,8 @@ export default function ItemsFormDialog({
     items,
     onSuccess,
 }: ItemsFormDialogProps) {
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isLoadingOptions, setIsLoadingOptions] = useState(false);
-
+    const [submitting, setSubmitting] = useState(false);
+    const [loadingOptions, setLoadingOptions] = useState(false);
     const [categories, setCategories] = useState<Category[]>([]);
     const [suppliers, setSuppliers] = useState<SupplierData[]>([]);
 
@@ -91,8 +87,7 @@ export default function ItemsFormDialog({
 
         const fetchOptions = async () => {
             try {
-                setIsLoadingOptions(true);
-
+               setLoadingOptions(true);
                 const [categoryData, supplierData] = await Promise.all([
                     categoryService.getCategories({
                         page: 1,
@@ -110,7 +105,7 @@ export default function ItemsFormDialog({
                 console.error("Failed to fetch options:", error);
                 window.alert("Failed to load categories and suppliers.");
             } finally {
-                setIsLoadingOptions(false);
+               setLoadingOptions(false);
             }
         };
 
@@ -150,7 +145,7 @@ export default function ItemsFormDialog({
 
     const onSubmit = async (values: ItemsFormValues) => {
         try {
-            setIsSubmitting(true);
+            setSubmitting(true);
 
             if (mode === "create") {
                 const data: CreateItem = {
@@ -180,7 +175,6 @@ export default function ItemsFormDialog({
                     supplierId: values.supplierId,
                 };
 
-
                 await itemService.updateItem(data, items.id);
             }
 
@@ -204,7 +198,7 @@ export default function ItemsFormDialog({
                 );
             }
         } finally {
-            setIsSubmitting(false);
+            setSubmitting(false);
         }
     };
 
@@ -216,7 +210,7 @@ export default function ItemsFormDialog({
     const categoryActive = categories.filter(
         (category) => category.isActive !== false ||
             category.id === items?.categoryId
-    )
+    );
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -247,7 +241,7 @@ export default function ItemsFormDialog({
                         <Input
                             id="sku"
                             placeholder="Enter item SKU"
-                            disabled={isSubmitting}
+                            disabled={submitting}
                             className="placeholder:normal-case uppercase"
                             {...register("sku", {
                                 required: "SKU is required",
@@ -270,7 +264,7 @@ export default function ItemsFormDialog({
                         <Input
                             id="name"
                             placeholder="Enter item name"
-                            disabled={isSubmitting}
+                            disabled={submitting}
                             {...register("name", {
                                 required: "Item name is required",
                                 validate: (value) =>
@@ -303,7 +297,7 @@ export default function ItemsFormDialog({
                                     min={0}
                                     step={1}
                                     placeholder="0"
-                                    disabled={isSubmitting || mode === "edit"}
+                                    disabled={submitting || mode === "edit"}
                                     className="pl-[44%]"
                                     {...register("stock", {
                                         required: "Stock is required",
@@ -348,7 +342,7 @@ export default function ItemsFormDialog({
                                     min={0}
                                     step={1}
                                     placeholder="0"
-                                    disabled={isSubmitting}
+                                    disabled={submitting}
                                     className="pl-[52%]"
                                     {...register("minimumStock", {
                                         required: "Minimum stock is required",
@@ -382,7 +376,7 @@ export default function ItemsFormDialog({
                         <Input
                             id="unit"
                             placeholder="e.g. pcs, box, kg"
-                            disabled={isSubmitting}
+                            disabled={submitting}
                             {...register("unit", {
                                 required: "Unit is required",
                                 validate: (value) =>
@@ -415,7 +409,7 @@ export default function ItemsFormDialog({
                                 min={0}
                                 step={1}
                                 placeholder="0"
-                                disabled={isSubmitting}
+                                disabled={submitting}
                                 className="pl-[22%]"
                                 {...register("purchasePrice", {
                                     required: "Purchase price is required",
@@ -465,12 +459,12 @@ export default function ItemsFormDialog({
                                         onValueChange={(value) =>
                                             field.onChange(Number(value))
                                         }
-                                        disabled={isSubmitting || isLoadingOptions}
+                                        disabled={submitting || loadingOptions}
                                     >
                                         <SelectTrigger id="categoryId" className="w-full">
                                             <SelectValue
                                                 placeholder={
-                                                    isLoadingOptions
+                                                    loadingOptions
                                                         ? "Loading categories..."
                                                         : "Select category"
                                                 }
@@ -503,9 +497,6 @@ export default function ItemsFormDialog({
                             )}
                         </div>
 
-
-
-
                         <div className="space-y-2">
                             <Label htmlFor="supplierId">
                                 Supplier{" "}
@@ -531,12 +522,12 @@ export default function ItemsFormDialog({
                                         onValueChange={(value) =>
                                             field.onChange(Number(value))
                                         }
-                                        disabled={isSubmitting || isLoadingOptions}
+                                        disabled={submitting || loadingOptions}
                                     >
                                         <SelectTrigger id="supplierId" className="w-full">
                                             <SelectValue
                                                 placeholder={
-                                                    isLoadingOptions
+                                                    loadingOptions
                                                         ? "Loading suppliers..."
                                                         : "Select supplier"
                                                 }
@@ -579,8 +570,6 @@ export default function ItemsFormDialog({
                             {...register("description")}
                         />
                     </div>
-
-
 
                     {mode === "edit" && items && (
                         <div className="grid grid-cols-[1fr_auto_1fr] gap-4 rounded-md border p-3">
@@ -625,7 +614,7 @@ export default function ItemsFormDialog({
                                 <Button
                                     type="button"
                                     variant="outline"
-                                    disabled={isSubmitting}
+                                    disabled={submitting}
                                 >
                                     Cancel
                                 </Button>
@@ -636,9 +625,9 @@ export default function ItemsFormDialog({
                             type="submit"
                             className="bg-slate-800 hover:bg-slate-900 transition-colors duration-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 border border-slate-300/80"
 
-                            disabled={isSubmitting || isLoadingOptions}
+                            disabled={submitting || loadingOptions}
                         >
-                            {isSubmitting ? (
+                            {submitting ? (
                                 <>
                                     <Loader className="size-4 animate-spin" />
                                     Savings...

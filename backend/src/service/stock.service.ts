@@ -120,12 +120,23 @@ export const stockService = {
             ...(type !== undefined && { type }),
             ...(status !== undefined && { status }),
             ...(itemId !== undefined && { itemId }),
-            ...(search && {
-                item: {
-                    name: {
-                        contains: search,
+            ...(search &&  {
+                OR: [
+                    {
+                        item: {
+                            name: {
+                                contains: search
+                            },
+                        },
                     },
-                },
+                    {
+                        item: {
+                            sku: {
+                                contains: search,
+                            },
+                        },
+                    },
+                ],
             }),
         };
 

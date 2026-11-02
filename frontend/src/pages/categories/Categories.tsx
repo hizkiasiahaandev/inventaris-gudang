@@ -18,7 +18,7 @@ import CustomTooltip from "@/components/common/CustomTooltip";
 
 export default function ManageCategories() {
     const [categories, setCategories] = useState<Category[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -52,7 +52,7 @@ export default function ManageCategories() {
 
     const fetchCategories = useCallback(async () => {
         try {
-            setIsLoading(true);
+            setLoading(true);
             setError(null);
 
             const response = await categoryService.getCategories({
@@ -76,7 +76,7 @@ export default function ManageCategories() {
             setTotalPages(0);
         } finally {
             setTimeout(() => {
-                setIsLoading(false);
+                setLoading(false);
             }, 300);
         };
     }, [
@@ -175,10 +175,6 @@ export default function ManageCategories() {
         };
     };
 
-
-
-
-
     const startIndex =
         totalCategories === 0
             ? 0
@@ -268,7 +264,7 @@ export default function ManageCategories() {
                             </tr>
                         </thead>
                         <tbody>
-                            {isLoading ? (
+                            {loading ? (
                                 <tr>
                                     <td
                                         colSpan={categoryColumns.length}
@@ -436,7 +432,7 @@ export default function ManageCategories() {
                     </table>
                 </div>
 
-                {!isLoading && !error && (
+                {!loading && !error && (
                     <div className="flex flex-col gap-4 border-t border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
                             <span>Rows per page:</span>

@@ -1,5 +1,3 @@
-"use client";
-
 import type { MovementChart } from "@/types/dashboard.types";
 import {
     LineChart,
@@ -16,7 +14,16 @@ interface Props {
     data: MovementChart[];
 }
 
-function DarkTooltip({ active, payload, label }: any) {
+type DarkTooltipProps = {
+    active?: boolean;
+    payload?: {
+        value: number | string;
+        name: string;
+    }[];
+    label?: string;
+}
+
+function DarkTooltip({ active, payload, label }: DarkTooltipProps) {
     if (!active || !payload?.length) return null;
     return (
         <div className="rounded-lg bg-gray-900 px-3 py-2 shadow-xl">
@@ -77,4 +84,4 @@ export default function StockMovementsChart({ data }: Props) {
             </ResponsiveContainer>
         </div>
     );
-}
+};

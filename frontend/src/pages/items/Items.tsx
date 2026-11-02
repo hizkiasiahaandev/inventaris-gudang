@@ -16,13 +16,12 @@ import type { ErrorResponse } from "@/types/api";
 import ItemDetailsDialog from "./ItemsDetailsDialog";
 import CustomTooltip from "@/components/common/CustomTooltip";
 
-
 export default function ManageItems() {
     const [items, setItems] = useState<ItemsData[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
     const [mode, setMode] = useState<Mode>("create");
     const [selectedItem, setSelectedItem] = useState<ItemsData | null>(null);
 
@@ -60,7 +59,7 @@ export default function ManageItems() {
 
     const fetchItems = useCallback(async () => {
         try {
-            setIsLoading(true);
+            setLoading(true);
             setError("");
 
             const response = await itemService.getItems({
@@ -84,7 +83,7 @@ export default function ManageItems() {
             setTotalPages(0);
         } finally {
             setTimeout(() => {
-                setIsLoading(false);
+                setLoading(false);
             }, 300);
         };
     }, [
@@ -133,14 +132,14 @@ export default function ManageItems() {
 
     const handleCreate = () => {
         setSelectedItem(null);
-        setIsDialogOpen(true);
+        setDialogOpen(true);
         setMode("create");
     };
 
     const handleEdit = (item: ItemsData) => {
         setSelectedItem(item);
         setMode("edit");
-        setIsDialogOpen(true);
+        setDialogOpen(true);
     };
 
     const handleActivate = async (id: number) => {
@@ -266,7 +265,7 @@ export default function ManageItems() {
                             </tr>
                         </thead>
                         <tbody>
-                            {isLoading ? (
+                            {loading ? (
                                 <tr>
                                     <td
                                         colSpan={itemColumns.length}
@@ -434,7 +433,7 @@ export default function ManageItems() {
                     </table>
                 </div>
 
-                {!isLoading && !error && (
+                {!loading && !error && (
                     <div className="flex flex-col gap-4 border-t border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
                             <span>Rows per page:</span>
@@ -512,12 +511,12 @@ export default function ManageItems() {
             />
 
             <ItemsFormDialog
-                open={isDialogOpen}
-                onOpenChange={setIsDialogOpen}
+                open={dialogOpen}
+                onOpenChange={setDialogOpen}
                 mode={mode}
                 items={selectedItem}
                 onSuccess={async () => {
-                    setIsDialogOpen(false);
+                    setDialogOpen(false);
                     await fetchItems();
                 }}
             />

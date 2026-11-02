@@ -28,10 +28,10 @@ import CustomTooltip from "@/components/common/CustomTooltip";
 
 export default function ManageUser() {
     const [users, setUsers] = useState<User[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
     const [mode, setMode] = useState<Mode>("create");
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
@@ -45,7 +45,7 @@ export default function ManageUser() {
     const [totalUsers, setTotalUsers] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
 
-    const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+    const [detailsOpen, setDetailsOpen] = useState(false);
     const [selectedUserById, setSelectedUserById] = useState<number | null>(null);
 
     useEffect(() => {
@@ -63,7 +63,7 @@ export default function ManageUser() {
 
     const fetchUsers = useCallback(async () => {
         try {
-            setIsLoading(true);
+            setLoading(true);
             setError(null);
 
 
@@ -88,7 +88,7 @@ export default function ManageUser() {
             setTotalPages(0);
         } finally {
             setTimeout(() => {
-                setIsLoading(false);
+                setLoading(false);
             }, 300);
         }
     }, [
@@ -105,18 +105,18 @@ export default function ManageUser() {
     const handleCreate = () => {
         setSelectedUser(null);
         setMode("create");
-        setIsDialogOpen(true);
+        setDialogOpen(true);
     };
 
     const handleEdit = (user: User) => {
         setSelectedUser(user);
         setMode("edit");
-        setIsDialogOpen(true);
+        setDialogOpen(true);
     };
 
     const handleViewDetails = (user: User) => {
         setSelectedUserById(user.id);
-        setIsDetailsOpen(true);
+        setDetailsOpen(true);
     };
 
 
@@ -280,7 +280,7 @@ export default function ManageUser() {
                         </thead>
 
                         <tbody>
-                            {isLoading ? (
+                            {loading ? (
                                 <tr>
                                     <td
                                         colSpan={columns.length}
@@ -463,7 +463,7 @@ export default function ManageUser() {
                 </div>
 
 
-                {!isLoading && !error && (
+                {!loading && !error && (
                     <div className="flex flex-col gap-4 border-t border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
                             <span>Rows per page:</span>
@@ -535,18 +535,18 @@ export default function ManageUser() {
             </div>
 
             <UserDetailsDialog
-                open={isDetailsOpen}
-                onOpenChange={setIsDetailsOpen}
+                open={detailsOpen}
+                onOpenChange={setDetailsOpen}
                 userById={selectedUserById}
             />
 
             <UserFormDialog
-                open={isDialogOpen}
-                onOpenChange={setIsDialogOpen}
+                open={dialogOpen}
+                onOpenChange={setDialogOpen}
                 mode={mode}
                 user={selectedUser}
                 onSuccess={async () => {
-                    setIsDialogOpen(false);
+                    setDialogOpen(false);
                     await fetchUsers();
                 }}
             />

@@ -24,7 +24,7 @@ export default function UserDetailsDialog({
     userById
 }: UserDetailsDialogProps) {
     const [user, setUser] = useState<UserData | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -32,7 +32,7 @@ export default function UserDetailsDialog({
 
         const fetchUser = async () => {
             try {
-                setIsLoading(true);
+                setLoading(true);
                 setError(null);
                 setUser(null);
 
@@ -47,7 +47,7 @@ export default function UserDetailsDialog({
                 setError(message);
             } finally {
                 setTimeout(() => {
-                    setIsLoading(false);
+                    setLoading(false);
                 }, 300);
             };
         };
@@ -67,7 +67,7 @@ export default function UserDetailsDialog({
                     </DialogDescription>
                 </DialogHeader>
 
-                {isLoading ? (
+                {loading ? (
                     <div className="py-8">
                         <Spinner text="Loading user details..." />
                     </div>

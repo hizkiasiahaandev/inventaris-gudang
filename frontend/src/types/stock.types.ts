@@ -9,6 +9,13 @@ export interface CreateStockMovement {
     note?: string;
 }
 
+export interface StockMovementValues {
+    itemId: number;
+    type: StockMovementType;
+    quantity: number;
+    note: string
+}
+
 export interface ItemRelation {
     id: number;
     sku: string;

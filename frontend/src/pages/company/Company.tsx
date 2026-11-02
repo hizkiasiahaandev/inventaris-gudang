@@ -10,7 +10,7 @@ import CustomTooltip from "@/components/common/CustomTooltip";
 
 export default function CompanyProfile() {
     const [company, setCompany] = useState<CompanyProfileService | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [mode, setMode] = useState<Mode>("create");
 
@@ -35,7 +35,7 @@ export default function CompanyProfile() {
             setCompany(null);
         } finally {
             setTimeout(() => {
-                setIsLoading(false);
+                setLoading(false);
             }, 300);
         }
     };
@@ -74,7 +74,7 @@ export default function CompanyProfile() {
                 )}
             </div>
 
-            {isLoading ? (
+            {loading ? (
                 <div className="flex items-center min-h-72 justify-center">
                     <Spinner text="Loading company profile" size={66} />
                 </div>

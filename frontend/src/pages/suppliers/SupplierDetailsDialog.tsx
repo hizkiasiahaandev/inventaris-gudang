@@ -31,7 +31,7 @@ export default function SupplierDetailsDialog({
     supplierId,
 }: SupplierDetailsDialogProps) {
     const [supplier, setSupplier] = useState<SupplierData | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -39,7 +39,7 @@ export default function SupplierDetailsDialog({
 
         const fetchSupplier = async () => {
             try {
-                setIsLoading(true);
+                setLoading(true);
                 setError(null);
                 setSupplier(null);
 
@@ -54,7 +54,7 @@ export default function SupplierDetailsDialog({
                 setError(message);
             } finally {
                 setTimeout(() => {
-                    setIsLoading(false);
+                    setLoading(false);
                 }, 300);
             }
         };
@@ -72,7 +72,7 @@ export default function SupplierDetailsDialog({
                     </DialogDescription>
                 </DialogHeader>
 
-                {isLoading ? (
+                {loading ? (
                     <div className="py-8">
                         <Spinner text="Loading supplier details..." />
                     </div>

@@ -1,4 +1,3 @@
-
 import Spinner from "@/components/common/Spinner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -32,7 +31,7 @@ export default function CategoryDetailsDialog({
     categoryId,
 }: CategoryDetailsDialogProps) {
     const [category, setCategory] = useState<Category | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -40,7 +39,7 @@ export default function CategoryDetailsDialog({
 
         const fetchCategory = async () => {
             try {
-                setIsLoading(true);
+                setLoading(true);
                 setError(null);
                 setCategory(null);
 
@@ -55,7 +54,7 @@ export default function CategoryDetailsDialog({
                 setError(message);
             } finally {
                 setTimeout(() => {
-                    setIsLoading(false);
+                    setLoading(false);
                 }, 300);
             };
         };
@@ -73,7 +72,7 @@ export default function CategoryDetailsDialog({
                     </DialogDescription>
                 </DialogHeader>
 
-                {isLoading ? (
+                {loading ? (
                     <div className="py-8">
                         <Spinner text="Loading category details..." />
                     </div>

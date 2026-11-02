@@ -19,10 +19,10 @@ import CustomTooltip from "@/components/common/CustomTooltip";
 
 export default function ManageSupplier() {
     const [suppliers, setSuppliers] = useState<SupplierData[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
     const [mode, setMode] = useState<Mode>("create");
     const [selectedSupplier, setSelectedSupplier] = useState<SupplierData | null>(null);
 
@@ -64,7 +64,7 @@ export default function ManageSupplier() {
 
     const fetchSuppliers = useCallback(async () => {
         try {
-            setIsLoading(true);
+            setLoading(true);
             setError("");
 
             const response = await supplierService.getSuppliers({
@@ -88,7 +88,7 @@ export default function ManageSupplier() {
             setTotalPages(0);
         } finally {
             setTimeout(() => {
-                setIsLoading(false);
+                setLoading(false);
             }, 300);
         };
     }, [
@@ -117,13 +117,13 @@ export default function ManageSupplier() {
     const handleCreate = () => {
         setSelectedSupplier(null);
         setMode("create");
-        setIsDialogOpen(true);
+        setDialogOpen(true);
     };
 
     const handleEdit = (supplier: SupplierData) => {
         setSelectedSupplier(supplier);;
         setMode("edit");
-        setIsDialogOpen(true);
+        setDialogOpen(true);
     };
 
     const handleViewDetails = async (supplier: SupplierData) => {
@@ -261,7 +261,7 @@ export default function ManageSupplier() {
                             </tr>
                         </thead>
                         <tbody>
-                            {isLoading ? (
+                            {loading ? (
                                 <tr>
                                     <td
                                         colSpan={supplierColumns.length}
@@ -441,7 +441,7 @@ export default function ManageSupplier() {
                 </div>
 
 
-                {!isLoading && !error && (
+                {!loading && !error && (
                     <div className="flex flex-col gap-4 border-t border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
                             <span>Rows per page:</span>
@@ -513,12 +513,12 @@ export default function ManageSupplier() {
             </div>
 
             <SupplierFormDialog
-                open={isDialogOpen}
-                onOpenChange={setIsDialogOpen}
+                open={dialogOpen}
+                onOpenChange={setDialogOpen}
                 mode={mode}
                 suppliers={selectedSupplier}
                 onSuccess={async () => {
-                    setIsDialogOpen(false);
+                    setDialogOpen(false);
                     fetchSuppliers();
                 }}
             />
