@@ -315,6 +315,8 @@ export const stockService = {
     ) {
         const skip = (page - 1) * limit;
 
+
+        
         const where: Prisma.StockMovementWhereInput = {
             ...(type && { type }),
             ...(status && { status }),
