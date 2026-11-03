@@ -46,6 +46,7 @@ export interface StockMovementData {
 export interface GetStockMovementsParams {
     page: number;
     limit: number;
+    search?: string;
     type?: StockMovementType;
     status?: StockMovementStatus;
     itemId?: number;

@@ -8,10 +8,10 @@ import { itemService } from "@/services/item.service";
 import { stockService } from "@/services/stock.service";
 import type { ErrorResponse } from "@/types/api";
 import type { ItemsData } from "@/types/item.types";
-import { type StockMovementValues, type CreateStockMovement, type StockMovementType } from "@/types/stock.types";
+import { type StockMovementValues, type CreateStockMovement } from "@/types/stock.types";
 import { ErrorMessage } from "@/utils/error";
 import axios from "axios";
-import { ArrowDownToLine, ArrowUpFromLine, Package, Plus } from "lucide-react";
+import { ArrowDownToLine, ArrowUpFromLine, Loader, Package, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
@@ -267,8 +267,7 @@ export default function StockMovementsDialog({
 
                       
                     </div>
-                </form>
-                  <DialogFooter>
+                      <DialogFooter>
                             <DialogClose
                                 render={
                                     <Button
@@ -283,11 +282,23 @@ export default function StockMovementsDialog({
                             <Button
                                 type="submit"
                                 className="bg-slate-800 inline-flex justify-center items-center gap-1 hover:bg-slate-900 transition-colors duration-300 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 border border-slate-300/80"
-                            >
-                                <Plus className="size-4" />
-                                Create Stock
+                                disabled={submitting}
+                           >
+                                {submitting ?(
+                                    <>
+                                    <Loader size={16} className="animate-spin" />
+                                    Savings...
+                                    </>
+                                ): (
+                                    <>
+                                    <Plus size={16} />
+                                    Create Stock
+                                    </>
+                                )}
                             </Button>
                         </DialogFooter>
+                </form>
+                
             </DialogContent>
         </Dialog>
     )
