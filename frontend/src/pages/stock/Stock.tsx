@@ -3,7 +3,7 @@ import Spinner from "@/components/common/Spinner";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { StockMovementData } from "@/types/stock.types";
-import {  CheckCircle, Info, PackageMinus, PackagePlus, Plus, Search, XCircle } from "lucide-react";
+import { CheckCircle, Info, PackageMinus, PackagePlus, Plus, Search, XCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import StockMovementsDialog from "./StockFormDialog";
 import type { StockStatusMovement, StockStatusFilter } from "@/types/filter-status";
@@ -200,10 +200,10 @@ export default function StockMovements() {
                             </SelectContent>
                         </Select>
                         <Select
-                        value={statusFilterStock}
-                        onValueChange={(value) => {
-                            setStatusFilterStock(value as StockStatusMovement)
-                        }}
+                            value={statusFilterStock}
+                            onValueChange={(value) => {
+                                setStatusFilterStock(value as StockStatusMovement)
+                            }}
                         >
                             <SelectTrigger className="w-full md:w-40 border border-slate-200 shadow-sm sm:max-w-52">
                                 <SelectValue placeholder="Select status" />
@@ -338,7 +338,7 @@ export default function StockMovements() {
                                             {item.note}
                                         </td>
 
-                                        <td className="whitespace-nowrap px-3 py-4">
+                                        <td className="whitespace-nowrap font-semibold text-slate-800 px-3 py-4">
                                             {item.quantity}
                                         </td>
 
@@ -362,7 +362,7 @@ export default function StockMovements() {
                     </table>
                 </div>
 
-   {!loading && !error && (
+                {!loading && !error && (
                     <div className="flex flex-col gap-4 border-t border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
                             <span>Rows per page:</span>
@@ -431,7 +431,7 @@ export default function StockMovements() {
                         </div>
                     </div>
                 )}
-             
+
             </div>
 
             <StockMovementsDialog

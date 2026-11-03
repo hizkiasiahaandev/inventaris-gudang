@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import StockMovementsChart from "./StockMovementsChart";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
 
 export default function MainDashboard() {
     const [summary, setSummary] = useState<DashboardSummary | null>(null);
@@ -253,14 +254,25 @@ export default function MainDashboard() {
                                                 </div>
                                             </td>
                                             <td className="whitespace-nowrap px-3 py-2.5">
-                                                <span className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-semibold">
-                                                    {mv.type === "IN" ? (
-                                                        <PackagePlus className="size-3" />
-                                                    ) : (
-                                                        <PackageMinus className="size-3" />
+                                                <Badge
+                                                variant="outline"
+                                                className={`${mv.type === "IN"
+                                                    ? "border-emerald-200 text-emerald-700 bg-emerald-50"
+                                                    : "border-red-200 bg-red-50 text-red-700"
+                                                }`}
+                                                >
+                                                    {mv.type === "IN" ?(
+                                                        <>
+                                                        <PackagePlus />
+                                                        IN
+                                                        </>
+                                                    ): (
+                                                        <>
+                                                        <PackageMinus />
+                                                        OUT
+                                                        </>
                                                     )}
-                                                    {mv.type}
-                                                </span>
+                                                </Badge>
                                             </td>
                                             <td className="whitespace-nowrap px-3 py-2.5  font-semibold  text-slate-800">
                                                 {mv.quantity}

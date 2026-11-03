@@ -323,10 +323,10 @@ export default function ManageItems() {
                                             {item.description}
                                         </td>
 
-                                        <td className="whitespace-nowrap px-3 py-4">
+                                        <td className="whitespace-nowrap font-semibold text-slate-800 px-3 py-4">
                                             {item.stock}
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4">
+                                        <td className="whitespace-nowrap font-semibold text-slate-800 px-3 py-4">
                                             {item.minimumStock}
                                         </td>
                                         <td className="whitespace-nowrap px-3 py-4">
