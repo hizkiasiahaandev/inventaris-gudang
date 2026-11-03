@@ -62,7 +62,7 @@ export default function StockDetailsDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent>
+            <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg">
                 <DialogHeader>
                     <DialogTitle>
                         Stock Details
@@ -114,12 +114,12 @@ export default function StockDetailsDialog({
                                         {stock.type === "IN" ? (
                                             <>
                                                 <PackagePlus />
-                                                Completed
+                                                IN
                                             </>
                                         ) : (
                                             <>
                                                 <PackageMinus />
-                                                Cancelled
+                                                OUT
                                             </>
                                         )}
                                     </Badge>
