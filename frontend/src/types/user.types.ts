@@ -35,6 +35,11 @@ export interface changePassword {
     newPassword: string;
 }
 
+export interface changePasswordValues {
+    currentPassword: string;
+    newPassword: string;
+}
+
 export interface updateUser {
     name?: string;
     email?: string;

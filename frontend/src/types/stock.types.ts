@@ -39,8 +39,12 @@ export interface StockMovementData {
     createdById: number;
     createdBy: UserRelation;
 
+    cancelledById?: number;
+    cancelledBy?: UserRelation;
+
     createdAt: string;
     updatedAt: string;
+    cancelledAt?: string
 }
 
 export interface GetStockMovementsParams {

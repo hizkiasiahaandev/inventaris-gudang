@@ -222,6 +222,12 @@ export const stockService = {
                         name: true,
                     },
                 },
+                cancelledBy: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
             },
         });
 

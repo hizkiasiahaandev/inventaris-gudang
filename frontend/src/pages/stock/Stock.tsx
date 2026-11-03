@@ -3,21 +3,25 @@ import Spinner from "@/components/common/Spinner";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { StockMovementData } from "@/types/stock.types";
-import { CheckCircle, Info, PackageMinus, PackagePlus, Plus, Search, XCircle } from "lucide-react";
+import { CheckCircle, Ellipsis, Eye, Info, PackageMinus, PackagePlus, Plus, Search, XCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import StockMovementsDialog from "./StockFormDialog";
 import type { StockStatusMovement, StockStatusFilter } from "@/types/filter-status";
 import { stockService } from "@/services/stock.service";
 import { Badge } from "@/components/ui/badge";
 import { date } from "@/utils/date";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import axios from "axios";
+import type { ErrorResponse } from "@/types/api";
+import StockDetailsDialog from "./StockDetailsDialog";
 
 export default function StockMovements() {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>("");
     const [stocks, setStocks] = useState<StockMovementData[]>([]);
 
-    const [dialogOpen, setDialogOpen] = useState(false);
-
+    const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+    const [detailOpen, setDetailOpen] = useState<boolean>(false);
     const [search, setSearch] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState<StockStatusFilter>("all");
@@ -96,6 +100,32 @@ export default function StockMovements() {
 
     const handleCreate = () => {
         setDialogOpen(true);
+    };
+
+    const handleViewDetails = async (stock: StockMovementData) => {
+        setDetailOpen(true);
+        setSelectedItemId(stock.id);
+    }
+
+    const handleCancel = async (id: number) => {
+        try {
+            await stockService.cancelStockMovement(id);
+
+            setStocks((prev) =>
+                prev.map((item) =>
+                    item.id === id
+                        ? { ...item, status: "CANCELLED" }
+                        : item
+                )
+            );
+        } catch (error) {
+            window.alert(
+                axios.isAxiosError<ErrorResponse>(error)
+                    ? error.response?.data.message ||
+                    "Failed to cancel stock movement"
+                    : "An unexpected error occured"
+            );
+        };
     };
 
     const stockType: {
@@ -185,7 +215,7 @@ export default function StockMovements() {
                                 setStatusFilter(value as StockStatusFilter)
                             }}
                         >
-                            <SelectTrigger className="w-full md:w-40 border border-slate-200 shadow-sm sm:max-w-52">
+                            <SelectTrigger className="w-50 md:w-50 border border-slate-200 shadow-sm sm:max-w-52">
                                 <SelectValue placeholder="Select type" />
                             </SelectTrigger>
                             <SelectContent>
@@ -354,7 +384,46 @@ export default function StockMovements() {
                                             {item.updatedAt ? date(item.updatedAt) : ""}
                                         </td>
 
-
+                                        <td className="whitespace-nowrap px-3 py-4">
+                                            <div className="flex items-center justify-end gap-2">
+                                                <CustomTooltip content="See Stock Details">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleViewDetails(item)}
+                                                        aria-label="See Stock Details"
+                                                        className="rounded-md text-slate-600">
+                                                        <Eye size={16} />
+                                                    </button>
+                                                </CustomTooltip>
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger
+                                                        render={
+                                                            <button
+                                                                type="button"
+                                                                className="rounded-md p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
+                                                                title="More options"
+                                                                aria-label="More options"
+                                                            >
+                                                                <Ellipsis className="size-5" />
+                                                            </button>
+                                                        }>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end" className="w-44">
+                                                        <DropdownMenuGroup>
+                                                            <DropdownMenuLabel>Change stock status</DropdownMenuLabel>
+                                                            <DropdownMenuItem
+                                                                disabled={item.status === "CANCELLED"}
+                                                                className="cursor-pointer"
+                                                                onClick={() => handleCancel(item.id)}
+                                                            >
+                                                                <XCircle className="mr-2 size-4" />
+                                                                Cancel Status
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuGroup>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            </div>
+                                        </td>
                                     </tr>
                                 ))
                             )}
@@ -437,6 +506,15 @@ export default function StockMovements() {
             <StockMovementsDialog
                 open={dialogOpen}
                 onOpenChange={setDialogOpen}
+                onSuccess={async () => {
+                    await fetchStock();
+                }}
+            />
+
+            <StockDetailsDialog
+                open={detailOpen}
+                onOpenChange={setDetailOpen}
+                stockId={selectedItemId}
             />
         </div>
     );

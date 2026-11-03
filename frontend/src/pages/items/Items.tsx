@@ -332,7 +332,7 @@ export default function ManageItems() {
                                         <td className="whitespace-nowrap px-3 py-4">
                                             {item.unit}
                                         </td>
-                                        <td className="whitespace-nowrap px-3 py-4">
+                                        <td className="whitespace-nowrap font-semibold text-slate-800 px-3 py-4">
                                             Rp. {item.purchasePrice}
                                         </td>
                                         <td className="whitespace-nowrap px-3 py-4">
