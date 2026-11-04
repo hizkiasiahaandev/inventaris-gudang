@@ -17,7 +17,7 @@ import UserFormDialog from "./UserFormDialog";
 import { userService } from "@/services/user.service";
 import type { StatusFilter } from "@/types/filter-status";
 import { date } from "@/utils/date";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import axios from "axios";
 import type { ErrorResponse } from "@/types/api";
@@ -339,6 +339,7 @@ export default function ManageUser() {
                                                     <AvatarFallback>
                                                         {user.name.slice(0, 2).toLocaleUpperCase() ?? "US"}
                                                     </AvatarFallback>
+                                                    <AvatarBadge className={user.isActive ? "bg-emerald-600" : "bg-slate-600"} />
                                                 </Avatar>
 
                                                 <div>

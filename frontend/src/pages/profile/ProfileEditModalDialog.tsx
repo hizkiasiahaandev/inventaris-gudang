@@ -17,7 +17,6 @@ interface ProfileModalProps {
     onSuccess?: () => void;
 };
 
-
 export default function ProfileModal({
     open,
     onOpenChange,

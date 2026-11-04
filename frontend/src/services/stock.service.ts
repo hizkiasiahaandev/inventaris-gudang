@@ -1,5 +1,5 @@
 import { api } from "@/api/axios";
-import type { CreateStockMovement, GetStockMovementsParams } from "@/types/stock.types";
+import type { CreateStockMovement, GetStockMovementsHistoryParams, GetStockMovementsParams } from "@/types/stock.types";
 
 export const stockService = {
   async createStockMovement(data: CreateStockMovement) {
@@ -10,6 +10,13 @@ export const stockService = {
   async getStockMovemnts(params: GetStockMovementsParams) {
     const response = await api.get("/stock", {
       params
+    });
+    return response.data;
+  },
+
+  async getStockMovementsHistory(params: GetStockMovementsHistoryParams) {
+    const response = await api.get("/stock/history", {
+      params,
     });
     return response.data;
   },

@@ -71,7 +71,7 @@ export default function ProfilePage() {
                         </p>
                     </div>
 
-                    <div className="flex flex-col md:flex-row items-start gap-6">
+                    <div className="flex flex-col sm:flex-row items-start gap-6">
                         <div className="shrink-0">
                             <Avatar className="size-22">
                                 <AvatarImage
@@ -80,11 +80,11 @@ export default function ProfilePage() {
                                     className="rounded-lg"
                                 />
                                 <AvatarFallback>{user?.name?.slice(0, 2).toUpperCase() ?? "US"}</AvatarFallback>
-                                <AvatarBadge className="bg-green-600 dark:bg-green-800" />
+                                <AvatarBadge className={user?.isActive ? "bg-emerald-600" : "bg-slate-600"} />
                             </Avatar>
                         </div>
 
-                        <div className="grid flex-1 grid-cols-2 gap-x-8 gap-y-5 min-w-0">
+                        <div className="grid flex-1 grid-cols-2 gap-x-12 gap-y-5 min-w-0">
                             <div>
                                 <p className="text-xs text-slate-500">Full Name</p>
                                 <p className="text-sm font-semibold text-slate-800">

@@ -79,7 +79,7 @@ export const menuGroups: MenuGroup[] = [
       {
         label: "Stock Movement History",
         desc: "Riwayat barang masuk dan keluar",
-        path: "/stock/history",
+        path: "/history",
         icon: History,
         roles: ["ADMIN", "STAFF"],
       },

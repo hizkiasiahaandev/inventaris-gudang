@@ -538,7 +538,10 @@ export default function ItemsFormDialog({
                                             <SelectGroup>
                                                 <SelectLabel>Select Supplier</SelectLabel>
                                                 {activeSupplier.map((supplier) => (
-                                                    <SelectItem>
+                                                    <SelectItem
+                                                     key={supplier.id}
+                                                     value={String(supplier.id)}
+                                                     >
                                                         <div className="flex flex-col">
                                                             <span className="font-medium">{supplier.name}</span>
                                                             <span className="text-xs text-muted-foreground">{supplier.email}</span>

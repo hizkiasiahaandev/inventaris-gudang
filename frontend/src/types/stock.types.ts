@@ -55,3 +55,15 @@ export interface GetStockMovementsParams {
     status?: StockMovementStatus;
     itemId?: number;
 }
+
+
+export interface GetStockMovementsHistoryParams {
+    page: number;
+    limit: number;
+    search?: string;
+    type?: StockMovementType;
+    status?: StockMovementStatus;
+    fromDate?: string;
+    toDate?: string;
+};
+

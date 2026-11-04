@@ -4,7 +4,7 @@ import { Menu, ChevronDown, UserRound, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { User } from "@/types/user.types";
 import { userService } from "@/services/user.service";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
 interface HeaderProps {
@@ -85,6 +85,7 @@ export default function Header({
                             <AvatarFallback>
                                 {user?.name?.slice(0, 2).toUpperCase() ?? "US"}
                             </AvatarFallback>
+                            <AvatarBadge className={user?.isActive ? "bg-emerald-600" : "bg-slate-600"} />
                         </Avatar>
 
                         <div className="hidden sm:block leading-tight text-left">

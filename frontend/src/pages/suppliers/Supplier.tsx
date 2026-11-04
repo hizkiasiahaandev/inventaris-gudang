@@ -8,7 +8,7 @@ import { useCallback, useEffect, useState } from "react";
 import SupplierFormDialog from "./SupplierFormDialog";
 import type { StatusFilter } from "@/types/filter-status";
 import { supplierService } from "@/services/supplier.service";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { date } from "@/utils/date";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -317,6 +317,7 @@ export default function ManageSupplier() {
                                                     <AvatarFallback>
                                                         {supplier.name.slice(0, 2).toLocaleUpperCase() ?? "US"}
                                                     </AvatarFallback>
+                                                    <AvatarBadge className={supplier.isActive? "bg-emerald-600": "bg-slate-600"} />
                                                 </Avatar>
 
                                                 <div>

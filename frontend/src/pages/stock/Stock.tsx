@@ -77,7 +77,7 @@ export default function StockMovements() {
     useEffect(() => {
         const timer = setTimeout(() => {
             setDebouncedSearch(search.trim());
-        });
+        }, 300);
 
         return () => clearTimeout(timer);
     }, [search])
@@ -372,7 +372,7 @@ export default function StockMovements() {
                                             {item.quantity}
                                         </td>
 
-                                        <td className="whitespace-nowrap px-3 py-4">
+                                        <td className="whitespace-nowrap font-semibold text-slate-800 px-3 py-4">
                                             {item.createdBy.name}
                                         </td>
 

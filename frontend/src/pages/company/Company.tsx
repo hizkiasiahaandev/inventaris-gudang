@@ -66,7 +66,7 @@ export default function CompanyProfile() {
                     <CustomTooltip content="Add Company">
                         <button
                             onClick={handleAdd}
-                            className="inline-flex items-center gap-2 px-4 py-2 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 text-sm font-medium text-white bg-slate-800 shadow-slate-600/15 border-slate-300/50 border hover:shadow-xl shadow-sm  rounded-lg">
+                            className="inline-flex items-center gap-2 px-4 py-2 focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 text-sm  text-white bg-slate-800 shadow-slate-600/15 border-slate-300/50 border hover:shadow-xl shadow-sm  rounded-lg">
                             <Plus size={14} />
                             Add Company
                         </button>
@@ -79,7 +79,7 @@ export default function CompanyProfile() {
                     <Spinner text="Loading company profile" size={66} />
                 </div>
             ) : company ? (
-                <div className="bg-white border shadow-sm border-slate-200 transition-all hover:shadow-sm p-6 rounded-xl">
+                <div className="bg-white border shadow-sm border-slate-200 transition-all  p-6 rounded-xl">
                     <div className="flex items-start gap-5 pb-6 border-b border-gray-200">
                         <div className="flex size-16 items-center justify-center overflow-hidden rounded-lg bg-slate-800 text-white shadow-sm">
                             {company?.logo ? (
@@ -101,7 +101,7 @@ export default function CompanyProfile() {
                                     </p>
                                 </div>
                                <CustomTooltip content="Edit company">
-                                 <button onClick={handleEdit} className="inline-flex focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 items-center border border-slate-300/50 gap-2 px-3 py-1.5 text-sm font-medium text-white bg-slate-800 hover:shadow-xl shadow-sm shadow-slate-600/15 transition duration-300 rounded-lg">
+                                 <button onClick={handleEdit} className="inline-flex focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 items-center border border-slate-300/50 gap-2 px-3 py-1.5 text-sm  text-white bg-slate-800 hover:shadow-xl shadow-sm shadow-slate-600/15 transition duration-300 rounded-lg">
                                     <Edit size={14} />
                                     Edit
                                 </button>
@@ -118,21 +118,21 @@ export default function CompanyProfile() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
                         {company.email && (
                             <div>
-                                <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">Email</p>
-                                <p className="text-sm text-slate-800">{company.email || "-"}</p>
+                                <p className="text-xs   text-slate-500">Email</p>
+                                <p className="text-sm font-semibold text-slate-800">{company.email || "-"}</p>
                             </div>
                         )}
 
                         {company.phone && (
                             <div>
-                                <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">Phone</p>
-                                <p className="text-sm text-slate-800">{company.phone || "-"}</p>
+                                <p className="text-xs   text-slate-500">Phone</p>
+                                <p className="text-sm font-semibold text-slate-800">{company.phone || "-"}</p>
                             </div>
                         )}
 
                         {company.website && (
                             <div>
-                                <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">Website</p>
+                                <p className="text-xs  text-slate-500">Website</p>
 
                                 <a
                                     href={company.website}
@@ -147,22 +147,22 @@ export default function CompanyProfile() {
 
                         {company.address && (
                             <div>
-                                <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">Address</p>
-                                <p className="text-sm text-slate-800">{company.address || "-"}</p>
+                                <p className="text-xs  text-slate-500">Address</p>
+                                <p className="text-sm font-semibold text-slate-800">{company.address || "-"}</p>
                             </div>
                         )}
 
                         {company.createdAt && (
                             <div>
-                                <p className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-1">Created At</p>
-                                <p className="text-sm text-slate-800">{date(company.createdAt || "-")}</p>
+                                <p className="text-xs  text-slate-500">Created At</p>
+                                <p className="text-sm font-semibold text-slate-800">{date(company.createdAt || "-")}</p>
                             </div>
                         )}
 
                         {company.updatedAt && (
                             <div>
-                                <p className="text-xs font-medium uppercase text-slate-400 tracking-wide mb-1">Updated At </p>
-                                <p className="text-sm text-slate-800">{date(company.updatedAt || "-")}</p>
+                                <p className="text-xs  text-slate-500">Updated At </p>
+                                <p className="text-sm font-semibold text-slate-800">{date(company.updatedAt || "-")}</p>
                             </div>
                         )}
                     </div>
