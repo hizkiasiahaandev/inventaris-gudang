@@ -9,6 +9,7 @@ import {
   type LucideIcon,
   ChartNoAxesCombined,
   History,
+  FileSpreadsheet,
 } from "lucide-react";
 
 export type UserRole = "ADMIN" | "STAFF";
@@ -83,7 +84,13 @@ export const menuGroups: MenuGroup[] = [
         icon: History,
         roles: ["ADMIN", "STAFF"],
       },
-
+      {
+        label: "Export History",
+        desc: "Export riwayat pergerakan stok ke Excel",
+        path: "/export",
+        icon: FileSpreadsheet,
+        roles: ["ADMIN"],
+      },
       {
         label: "Reports",
         desc: "Laporan dan analisis stok",

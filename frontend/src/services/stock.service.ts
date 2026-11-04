@@ -1,5 +1,5 @@
 import { api } from "@/api/axios";
-import type { CreateStockMovement, GetStockMovementsHistoryParams, GetStockMovementsParams } from "@/types/stock.types";
+import type { CreateStockMovement, exportStockMovementsHistory, GetStockMovementsHistoryParams, GetStockMovementsParams } from "@/types/stock.types";
 
 export const stockService = {
   async createStockMovement(data: CreateStockMovement) {
@@ -20,6 +20,16 @@ export const stockService = {
     });
     return response.data;
   },
+
+  async ExportStockHistoryMovements(params: exportStockMovementsHistory) {
+      const response = await api.get("/stock/history/export", {
+        params,
+        responseType: "blob",
+      });
+      return response.data
+  },
+
+
 
   async getStockMovementsById(id: number) {
     const response = await api.get(`/stock/${id}`);

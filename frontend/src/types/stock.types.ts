@@ -67,3 +67,10 @@ export interface GetStockMovementsHistoryParams {
     toDate?: string;
 };
 
+export interface exportStockMovementsHistory {
+    type?: StockMovementType;
+    status?: StockMovementStatus;
+    search?: string;
+    fromDate?: string;
+    toDate?: string;
+};

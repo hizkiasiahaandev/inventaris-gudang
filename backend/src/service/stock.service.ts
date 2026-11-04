@@ -427,11 +427,22 @@ export const stockService = {
             ...(status && { status }),
 
             ...(search && {
-                item: {
-                    name: {
-                        contains: search,
+                OR: [
+                    {
+                        item: {
+                            name: {
+                                contains: search,
+                            },
+                        },
                     },
-                },
+                    {
+                        item: {
+                            sku: {
+                                contains: search,
+                            },
+                        },
+                    },
+                ],
             }),
 
             ...((fromDate || toDate) && {
@@ -504,7 +515,7 @@ export const stockService = {
                 quantity: movement.quantity,
                 status: movement.status,
                 note: movement.note ?? "-",
-                createdBy: movement.cancelledBy?.name ?? "-",
+                createdBy: movement.createdBy?.name ?? "-",
                 cancelledBy: movement.cancelledBy?.name ?? "-",
                 cancelledAt: movement.cancelledAt ?? "-",
             });
