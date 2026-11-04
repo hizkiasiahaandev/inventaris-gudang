@@ -15,7 +15,7 @@ router.post(
 router.get(
     "/:id",
     authMiddleware,
-    roleMiddleware("ADMIN"),
+    roleMiddleware("ADMIN", "STAFF"),
     supplierController.getSupplierById
 );
 
@@ -37,7 +37,7 @@ router.patch(
 router.get(
     "/",
     authMiddleware,
-    roleMiddleware("ADMIN"),
+    roleMiddleware("ADMIN", "STAFF"),
     supplierController.getSuppliers
 );
 

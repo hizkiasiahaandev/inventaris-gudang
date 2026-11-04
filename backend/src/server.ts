@@ -7,9 +7,11 @@ import routes from "./routes/index";
 
 const app = express();
 
-const allowedOrigins = [
+type AllowedOrigin = string
+
+const allowedOrigins: AllowedOrigin[] = [
     "http://localhost:5173",
-    "http://10.226.4.37:5173",
+    "http://10.48.188.37:5173",
 ];
 
 app.use(

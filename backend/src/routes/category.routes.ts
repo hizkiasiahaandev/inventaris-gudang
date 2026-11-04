@@ -36,7 +36,7 @@ router.patch(
 router.get(
     "/",
     authMiddleware,
-    roleMiddleware("ADMIN"),
+    roleMiddleware("ADMIN", "STAFF"),
     categoryController.getCategories
 );
 
