@@ -56,7 +56,7 @@ export default function StockExportHistory() {
         }
     };
 
-   const fetchStock = useCallback(async () => {
+    const fetchStock = useCallback(async () => {
         try {
             setLoading(true);
             setError("");
@@ -169,10 +169,10 @@ export default function StockExportHistory() {
             <div className="flex items-start justify-between gap-2">
                 <div>
                     <h2 className="text-2xl font-bold tracking-tight text-slate-800">
-                        Stock Movements History
+                        Export Stock Movements
                     </h2>
                     <p className="text-sm text-slate-500">
-                        View and monitor all incoming and outgoing inventory transactions.
+                        Export incoming and outgoing inventory transaction history to Excel.
                     </p>
                 </div>
                 <CustomTooltip content="Export to excel">

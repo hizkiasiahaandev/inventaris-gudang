@@ -522,19 +522,21 @@ export const stockService = {
         };
 
         const header = worksheet.getRow(1);
-        header.font = {
-            bold: true,
-            color: { argb: "FFFFFFFF" },
-        },
-            header.fill = {
+
+        header.eachCell((cell) => {
+            cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
+            cell.fill = {
                 type: "pattern",
                 pattern: "solid",
                 fgColor: { argb: "FF1F4E78" },
             };
-        header.alignment = {
-            vertical: "middle",
-            horizontal: "center",
-        };
+            cell.alignment = {
+                vertical: "middle",
+                horizontal: "center",
+            };
+        });
+
+
         header.height = 25;
 
         worksheet.getColumn("createdAt").numFmt = "dd/mm/yyyy hh:mm";
