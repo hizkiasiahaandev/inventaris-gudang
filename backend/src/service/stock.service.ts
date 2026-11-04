@@ -120,7 +120,7 @@ export const stockService = {
             ...(type !== undefined && { type }),
             ...(status !== undefined && { status }),
             ...(itemId !== undefined && { itemId }),
-            ...(search &&  {
+            ...(search && {
                 OR: [
                     {
                         item: {
@@ -332,18 +332,27 @@ export const stockService = {
     ) {
         const skip = (page - 1) * limit;
 
-
-        
         const where: Prisma.StockMovementWhereInput = {
             ...(type && { type }),
             ...(status && { status }),
 
             ...(search && {
-                item: {
-                    name: {
-                        contains: search,
+                OR: [
+                    {
+                        item: {
+                            name: {
+                                contains: search,
+                            },
+                        },
                     },
-                },
+                    {
+                        item: {
+                            sku: {
+                                contains: search,
+                            },
+                        },
+                    },
+                ],
             }),
 
             ...((fromDate || toDate) && {

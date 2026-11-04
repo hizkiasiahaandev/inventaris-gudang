@@ -23,6 +23,26 @@ export const itemService = {
             throw new Error("Stock, minimum stock, and purchase price cannot be negative");
         }
 
+        const supplier = await prisma.supplier.findUnique({
+            where: {
+                id: supplierId
+            }
+        });
+
+        if (!supplier) {
+            throw new Error("Supplier not found");
+        }
+
+        const category = await prisma.category.findUnique({
+            where: {
+                id: categoryId,
+            },
+        });
+
+        if (!category) {
+            throw new Error("Category not found");
+        }
+
         const existingItem = await prisma.item.findUnique({
             where: {
                 sku,
@@ -60,15 +80,15 @@ export const itemService = {
                 },
             },
             include: {
-                category:{
-                    select :{
+                category: {
+                    select: {
                         id: true,
                         name: true,
                     },
                 },
-                supplier:{
-                    select :{
-                        id:true,
+                supplier: {
+                    select: {
+                        id: true,
                         name: true,
                     },
                 },
@@ -161,7 +181,7 @@ export const itemService = {
                 },
             },
             include: {
-                category:{
+                category: {
                     select: {
                         id: true,
                         name: true,
@@ -276,14 +296,14 @@ export const itemService = {
                 orderBy: {
                     createdAt: "desc",
                 },
-                include :{
+                include: {
                     category: {
                         select: {
                             id: true,
                             name: true,
                         },
                     },
-                    supplier:{
+                    supplier: {
                         select: {
                             id: true,
                             name: true,
@@ -291,7 +311,7 @@ export const itemService = {
                     },
                     createdBy: {
                         select: {
-                            id:true,
+                            id: true,
                             name: true,
                         },
                     },
